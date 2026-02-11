@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Welcome | Travel App</title>
+    <title>Welcome | CampusMart</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
 
     <style>
@@ -18,11 +17,11 @@
 
         body {
             height: 100vh;
-            background: linear-gradient(to right, #1e3c72, #2a5298);
+            background: linear-gradient(to right, #b7e4c7, #95d5b2);
             display: flex;
             justify-content: center;
             align-items: center;
-            color: white;
+            color: #1b4332;
         }
 
         .container {
@@ -31,40 +30,98 @@
 
         h1 {
             font-size: 60px;
-            font-weight: 600;
             margin-bottom: 20px;
         }
 
         p {
             font-size: 20px;
-            opacity: 0.9;
         }
 
         .btn {
-            margin-top: 30px;
+            margin-top: 90px;
             padding: 12px 30px;
             background: white;
-            color: #2a5298;
-            border: none;
+            color: #2d6a4f;
             border-radius: 30px;
-            font-size: 16px;
-            cursor: pointer;
             text-decoration: none;
+            cursor: pointer;
+            border: none;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
             transition: 0.3s ease;
         }
 
-        .btn:hover {
-            background: #f1f1f1;
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            transform: scale(0.8);
+            transition: 0.3s ease;
+        }
+
+        .modal.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-box a {
+            display: block;
+            margin: 15px 0;
+            padding: 12px;
+            background: #2d6a4f;
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+        }
+
+        .close {
+            margin-top: 10px;
+            cursor: pointer;
+            color: #555;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>WELCOME</h1>
-        <p>Welcome to your Traveling App 🚀</p>
-        <a href="{{ url('/login') }}" class="btn">Get Started</a>
+<div class="container">
+    <h1>WELCOME</h1>
+    <p>Welcome to CAMPUSMART</p>
+    <button class="btn" onclick="openModal()">Get Started</button>
+</div>
+
+<div class="modal" id="modal">
+    <div class="modal-box">
+        <a href="{{ route('login') }}">LOGIN</a>
+        <a href="{{ route('register') }}">SIGN UP</a>
+        <div class="close" onclick="closeModal()">Cancel</div>
     </div>
+</div>
+
+<script>
+    function openModal() {
+        document.getElementById('modal').classList.add('active');
+    }
+
+    function closeModal() {
+        document.getElementById('modal').classList.remove('active');
+    }
+</script>
 
 </body>
 </html>
