@@ -89,6 +89,17 @@
     </div>
     <h2>Create Account</h2>
 
+    @if ($errors->any())
+    <div style="color:red; margin-bottom:10px;">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
