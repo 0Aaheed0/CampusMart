@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,27 +22,26 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(Request $request)
+    public function store(LoginRequest $request): RedirectResponse
     {
-        $credentials = $request->only('email', 'password');
+        $request->authenticate();
 
-        if (! $token = auth('api')->attempt($credentials)) {
-            return back()->withErrors(['email' => 'Invalid credentials']);
-        }
+        $request->session()->regenerate();
 
-         // Set the cookie (valid for 60 minutes)
-         $cookie = cookie('token', $token, 60);
-
-        return redirect()->route('dashboard')->withCookie($cookie);
+        return redirect()->intended(route('home', absolute: false));
     }
 
     /**
      * Destroy an authenticated session.
      */
-   public function destroy()
+    public function destroy(Request $request): RedirectResponse
     {
-        auth('api')->logout();
-        $cookie = cookie()->forget('token');
-        return redirect('/login')->withCookie($cookie);
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }

@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 // Dummy CRUD operations for items using UsersController
 Route::get('/items', [UsersController::class, 'index']);
 Route::get('/items/{id}', [UsersController::class, 'show']);
-Route::post('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'store']);
+
 //Protected routes
 Route::middleware('auth:api')->group(function () {
     Route::post('/items', [UsersController::class, 'store']);
