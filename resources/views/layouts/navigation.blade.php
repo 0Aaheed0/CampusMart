@@ -23,7 +23,7 @@
                         class="h-9 w-auto transition-opacity duration-200 group-hover:opacity-90"
                     />
                     <span class="hidden sm:block font-monsta tracking-[0.3em] text-white">
-                        LANTERN
+                        CampusMart
                     </span>
                 </a>
             </div>
