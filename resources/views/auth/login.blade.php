@@ -1,123 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login | CampusMart</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    <style>
-        body {
-            height: 100vh;
-            background: linear-gradient(to right, #e9f5ec, #d8f3dc);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .card {
-            background: white;
-            width: 380px;
-            padding: 35px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .icon {
-            font-size: 40px;
-            color: #2d6a4f;
-            margin-bottom: 10px;
-        }
-
-        h2 {
-            margin-bottom: 25px;
-            color: #1b4332;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px 38px 12px 14px;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            outline: none;
-            box-sizing: border-box;
-        }
-
-        .password-box {
-            position: relative;
-        }
-
-        .password-box i {
-            position: absolute;
-            right: 12px;
-            top: 13px;
-            cursor: pointer;
-            color: #555;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #2d6a4f;
-            border: none;
-            color: white;
-            border-radius: 30px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .link {
-            margin-top: 15px;
-            font-size: 14px;
-        }
-
-        .link a {
-            color: #2d6a4f;
-            text-decoration: none;
-        }
-    </style>
 </head>
-<body>
-
-<div class="card">
-    <div class="icon">
-        <i class="fas fa-book-reader"></i>
-    </div>
-    <h2>Login</h2>
-
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-
-        <input type="email" name="email" placeholder="Email" required>
-
-        <div class="password-box">
-            <input type="password" name="password" id="password" placeholder="Password" required>
-            <i class="fas fa-eye" onclick="togglePassword()"></i>
+<body class="bg-gray-100">
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="px-8 py-6 mt-4 text-left bg-white shadow-lg w-1/3">
+            <h3 class="text-2xl font-bold text-center text-blue-600">Login</h3>
+            <form id="loginForm" action="{{ url('/login') }}" method="POST">
+                @csrf
+                <div class="mt-4">
+                    <div>
+                        <label class="block" for="email">Email</label>
+                        <input type="email" placeholder="Email"
+                            class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+                            id="email" name="email" required>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block" for="password">Password</label>
+                        <input type="password" placeholder="Password"
+                            class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+                            id="password" name="password" required>
+                    </div>
+                    <div class="flex items-baseline justify-between">
+                        <button type="submit"
+                            class="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900">Login</button>
+                        <a href="/register" class="text-sm text-blue-600 hover:underline">Don't have an account?</a>
+                    </div>
+                </div>
+            </form>
         </div>
-
-        <button type="submit">LOGIN</button>
-    </form>
-
-    <div class="link">
-        Don’t have an account?
-        <a href="{{ route('register') }}">Sign up</a>
     </div>
-</div>
-
-<script>
-    function togglePassword() {
-        const pass = document.getElementById('password');
-        pass.type = pass.type === 'password' ? 'text' : 'password';
-    }
-</script>
-
+    @vite(['resources/js/app.js'], 'build')
 </body>
 </html>
