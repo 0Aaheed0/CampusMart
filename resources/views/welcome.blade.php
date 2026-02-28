@@ -1,55 +1,127 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>Welcome | CampusMart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>CampusMart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-    <!-- Styles -->
-    @vite(['resources/css/app.css'])
+        body {
+            height: 100vh;
+            background: linear-gradient(to right, #b7e4c7, #95d5b2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #1b4332;
+        }
 
-    <!-- Scripts -->
-    @vite(['resources/js/app.js'])
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 20px;
+        }
+
+        .btn {
+            margin-top: 90px;
+            padding: 12px 30px;
+            background: white;
+            color: #2d6a4f;
+            border-radius: 30px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            transform: scale(0.8);
+            transition: 0.3s ease;
+        }
+
+        .modal.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-box a {
+            display: block;
+            margin: 15px 0;
+            padding: 12px;
+            background: #2d6a4f;
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+        }
+
+        .close {
+            margin-top: 10px;
+            cursor: pointer;
+            color: #555;
+        }
+    </style>
 </head>
-<body class="antialiased bg-gray-100">
-    <div class="relative min-h-screen flex items-center justify-center bg-white">
-        <div class="text-center">
-            <h1 class="text-5xl font-bold text-blue-600">Welcome to CampusMart</h1>
-            <p class="mt-4 text-lg text-gray-600">Your one-stop shop for campus needs.</p>
-            <div x-data="{ 'showModal': false }">
-                <button @click="showModal = true" class="mt-8 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Get Started</button>
+<body>
 
-                <div x-show="showModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" x-cloak>
-                    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-                        <div class="mt-3 text-center">
-                            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
-                                <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3zm0 2c2.21 0 4 1.79 4 4v1H8v-1c0-2.21 1.79-4 4-4z"></path></svg>
-                            </div>
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">Get Started</h3>
-                            <div class="mt-2 px-7 py-3">
-                                <p class="text-sm text-gray-500">
-                                    Sign up or log in to continue.
-                                </p>
-                            </div>
-                            <div class="items-center px-4 py-3">
-                                <a href="/register" class="px-4 py-2 bg-blue-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    Sign Up
-                                </a>
-                                <a href="/login" class="mt-3 block text-center px-4 py-2 bg-gray-200 text-gray-800 text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                                    Log In
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="container">
+    <h1>WELCOME</h1>
+    <p>Welcome to CAMPUSMART</p>
+    <button class="btn" onclick="openModal()">Get Started</button>
+</div>
+
+<div class="modal" id="modal">
+    <div class="modal-box">
+        <a href="{{ route('login') }}">LOGIN</a>
+        <a href="{{ route('register') }}">SIGN UP</a>
+        <div class="close" onclick="closeModal()">Cancel</div>
     </div>
+</div>
+
+<script>
+    function openModal() {
+        document.getElementById('modal').classList.add('active');
+    }
+
+    function closeModal() {
+        document.getElementById('modal').classList.remove('active');
+    }
+</script>
+
 </body>
 </html>
