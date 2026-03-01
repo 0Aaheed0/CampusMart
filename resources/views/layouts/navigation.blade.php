@@ -11,10 +11,8 @@
         class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-40 lg:hidden"
     ></div>
 
-    <!-- NAVBAR CONTENT WRAPPER -->
     <div class="w-full px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16 gap-4">
-            <!-- LOGO + APP NAME -->
             <div class="flex items-center gap-3 shrink-0">
                 <a href="{{ route('home') }}" class="flex items-center gap-2 group">
                     <img
@@ -28,7 +26,6 @@
                 </a>
             </div>
 
-            <!-- DESKTOP NAVIGATION TABS -->
             <div class="hidden lg:flex flex-1 justify-center">
                 <div
                     class="relative flex items-center gap-5 rounded-2xl bg-blue-50 p-2
@@ -40,7 +37,6 @@
                         :style="activePillStyle"
                     ></div>
 
-                    <!-- DESKTOP TAB LINKS -->
                     <template x-for="item in items" :key="item.key">
                         <a
                             :href="item.href"
@@ -56,7 +52,6 @@
                             <span class="relative">
                                 <span x-text="item.label"></span>
 
-                                <!-- UNDERLINE ANIMATION FOR ACTIVE TAB -->
                                 <span
                                     class="absolute left-0 -bottom-1 h-[2px] w-full origin-left scale-x-0 rounded-full
                                            transition-transform duration-300 ease-out"
@@ -68,11 +63,9 @@
                 </div>
             </div>
 
-            <!-- PROFILE DROPDOWN -->
             <div class="hidden sm:flex items-center gap-3 shrink-0 mr-4">
                 <x-dropdown align="right" width="48" content-classes="bg-transparent shadow-none p-0">
                     <x-slot name="trigger">
-                        <!-- AVATAR BUTTON -->
                         <button
                             class="group inline-flex items-center justify-center h-10 w-10 rounded-full
                                 border-2 border-blue-400 text-blue-400 font-semibold
@@ -83,7 +76,6 @@
                         </button>
                     </x-slot>
 
-                    <!-- DROPDOWN CONTENT -->
                     <x-slot name="content">
                         <div
                             class="rounded-2xl bg-white p-2
@@ -113,9 +105,7 @@
                 </x-dropdown>
             </div>
 
-            <!-- PROFILE + HAMBURGER MENU -->
             <div class="flex items-center gap-3 lg:hidden">
-                <!-- MOBILE PROFILE DROPDOWN -->
                 <x-dropdown align="right" width="48" content-classes="bg-transparent shadow-none p-0">
                     <x-slot name="trigger">
                         <button
@@ -131,7 +121,6 @@
 
                     <x-slot name="content">
                         <div class="rounded-2xl bg-white p-2 shadow-xl ring-1 ring-blue-100">
-
                             <x-dropdown-link
                                 :href="route('profile.edit')"
                                 class="block rounded-xl px-4 py-2.5 text-sm font-semibold
@@ -155,7 +144,6 @@
                     </x-slot>
                 </x-dropdown>
 
-                <!-- HAMBURGER MENU BUTTON -->
                 <button
                     @click="open = !open"
                     class="flex items-center justify-center w-11 h-11 rounded-xl
@@ -182,7 +170,6 @@
         </div>
     </div>
 
-    <!-- MOBILE NAVIGATION MENU -->
     <div
         x-show="open"
         x-transition:enter="transition ease-out duration-250"
@@ -194,7 +181,6 @@
         class="lg:hidden border-t border-blue-200 bg-white relative z-50"
     >
         <div class="px-4 py-4 space-y-2">
-            <!-- MOBILE NABIGATION LINKS -->
             <template x-for="item in items" :key="'m-' + item.key">
                 <a
                     :href="item.href"
@@ -230,6 +216,8 @@
                     { key: 'habits',    label: 'Habits',    href: "{{ url('/habits') }}" },
                     { key: 'ach',       label: 'Achievements', href: "{{ url('/achievements') }}" },
                     { key: 'resources', label: 'Resources', href: "{{ url('/resources') }}" },
+                    // Added Profile here if you want it in the sliding pill menu too
+                    { key: 'profile', label: 'Profile', href: "{{ route('profile.edit') }}" },
                 ],
 
                 activeKey: 'home',
@@ -238,7 +226,6 @@
                 init() {
                     const path = window.location.pathname;
 
-                    // basic path-based active (works with your Route::view('/tasks','dashboard') etc.)
                     const map = [
                         ['home', 'home'],
                         ['schedule', 'schedule'],
@@ -249,6 +236,7 @@
                         ['habits', 'habits'],
                         ['achievements', 'ach'],
                         ['resources', 'resources'],
+                        ['profile', 'profile'], // Added this line to keep pill on Profile
                     ];
 
                     for (const [segment, key] of map) {
@@ -272,6 +260,10 @@
 
                     const anchors = wrap.querySelectorAll('a');
                     const activeIndex = this.items.findIndex(i => i.key === this.activeKey);
+                    
+                    // Safety check in case the activeIndex isn't found
+                    if (activeIndex === -1) return;
+                    
                     const el = anchors[activeIndex];
                     if (!el) return;
 

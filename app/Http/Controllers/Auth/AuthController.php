@@ -51,18 +51,18 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $credentials = $request->validate([
+        $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
+        $credentials = $request->only('email', 'password');
+
         if (! $token = Auth::attempt($credentials)) {
-            throw ValidationException::withMessages([
-                'email' => [trans('auth.failed')],
-            ]);
+            return redirect()->back()->with('error', 'Invalid email or password. Please try again.');
         }
 
-        // Set the JWT token in a cookie
+        // Set the JWT token in a cookie and go to home
         return redirect('/home')->withCookie(cookie('token', $token, config('jwt.ttl')));
     }
 
@@ -76,21 +76,28 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'email' => [
+                'required', 
+                'string', 
+                'email', 
+                'max:255', 
+                'unique:users', 
+                'regex:/^[A-Za-z0-9._%+-]+@aust\.edu$/i'
+            ],
+            'password' => 'required|string|min:8|confirmed',
+        ], [
+            'email.regex' => 'The email must be a valid @aust.edu address.',
+            'password.min' => 'The password must be at least 8 characters.'
         ]);
 
-        $user = User::create([
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        // Log the user in immediately after registration
-        $token = Auth::login($user);
-
-        // Set the JWT token in a cookie
-        return redirect('/home')->withCookie(cookie('token', $token, config('jwt.ttl')));
+        // Redirect to login page with a success message instead of logging in automatically
+        return redirect()->route('login')->with('success', 'Registration successful! Please login.');
     }
 
     /**
