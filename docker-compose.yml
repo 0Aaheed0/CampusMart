@@ -8,13 +8,11 @@ services:
     container_name: campusmart_app
     restart: unless-stopped
     working_dir: /var/www/html
-    volumes:
-      - ./:/var/www/html
     ports:
       - "8000:8000"
     depends_on:
       - db
-    command: sh -c "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"
+    command: php artisan serve --host=0.0.0.0 --port=8000
 
   db:
     image: mysql:8.0
@@ -23,8 +21,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root123
       MYSQL_DATABASE: campusmart
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root123
+      
     ports:
       - "3306:3306"
     volumes:
