@@ -120,8 +120,7 @@ https://www.figma.com/make/xnFoKLSAeXRlCtaRUyNFAb/CampusMart?t=LDgXAxIu7ZHUevRE-
 - Item listing CRUD
 - Search & filtering
 - User profiles
-- Messaging system
-- Frontend-backend integration
+- Database connections
 
 ### Milestone 3: AI & Finalization
 - AI price suggestion
