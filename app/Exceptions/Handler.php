@@ -27,7 +27,7 @@ class Handler extends ExceptionHandler
             //
         });
     }
-
+    /*
     public function render($request, Throwable $exception)
     {
         if ($exception instanceof BadRequestException) {
@@ -43,5 +43,6 @@ class Handler extends ExceptionHandler
         ], 500);
 
     }
-
+        
+*/
 }
