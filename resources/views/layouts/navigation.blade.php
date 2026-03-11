@@ -114,7 +114,7 @@
         </div>
     </nav>
 
-    <!-- Sidebar Overlay - MOVED TO TOP LEVEL TO AVOID CLIPPING -->
+    <!-- Sidebar Overlay -->
     <div
         x-show="sidebarOpen"
         x-transition:enter="transition opacity-0 duration-400"
@@ -128,7 +128,7 @@
         style="display: none;"
     ></div>
 
-    <!-- Sidebar Menu - MOVED TO TOP LEVEL TO AVOID CLIPPING -->
+    <!-- Sidebar Menu -->
     <div
         x-show="sidebarOpen"
         x-transition:enter="transition transform duration-500 cubic-bezier(0.4, 0, 0.2, 1)"
@@ -141,22 +141,22 @@
         style="display: none;"
     >
         <!-- Sidebar Header -->
-        <div class="p-8 bg-gradient-to-br from-blue-700 to-indigo-800 text-white relative overflow-hidden shrink-0">
+        <div class="p-6 bg-gradient-to-br from-blue-700 to-indigo-800 text-white relative overflow-hidden shrink-0">
             <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full"></div>
-            <div class="flex items-center justify-between mb-10 relative z-10">
+            <div class="flex items-center justify-between mb-6 relative z-10">
                 <div class="flex items-center gap-3">
                     <div class="p-1.5 bg-white rounded-xl shadow-lg">
                         <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-6">
                     </div>
                     <span class="font-monsta text-lg tracking-[0.2em]">MENU</span>
                 </div>
-                <button @click="sidebarOpen = false" class="p-2.5 hover:bg-white/20 rounded-xl transition-all active:scale-90">
+                <button @click="sidebarOpen = false" class="p-2 hover:bg-white/20 rounded-xl transition-all active:scale-90">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
             </div>
             
             <div class="flex items-center gap-4 relative z-10">
-                <div class="h-14 w-14 rounded-2xl bg-white/20 border-2 border-white/50 flex items-center justify-center font-black text-2xl shadow-xl overflow-hidden">
+                <div class="h-12 w-12 rounded-2xl bg-white/20 border-2 border-white/50 flex items-center justify-center font-black text-xl shadow-xl overflow-hidden shrink-0">
                     @auth
                         @if(Auth::user()->profile && Auth::user()->profile->profile_picture)
                             <img src="{{ asset('storage/' . Auth::user()->profile->profile_picture) }}" alt="Avatar" class="h-full w-full object-cover">
@@ -164,23 +164,23 @@
                             {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                         @endif
                     @else
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                     @endauth
                 </div>
-                <div>
+                <div class="min-w-0">
                     @auth
-                        <p class="font-black text-lg truncate w-44 tracking-tight">{{ Auth::user()->name }}</p>
-                        <p class="text-[11px] text-blue-100 font-bold uppercase tracking-widest opacity-80">{{ Auth::user()->email }}</p>
+                        <p class="font-black text-base truncate w-40 tracking-tight">{{ Auth::user()->name }}</p>
+                        <p class="text-[10px] text-blue-100 font-bold uppercase tracking-widest opacity-80 truncate w-40">{{ Auth::user()->email }}</p>
                     @else
-                        <p class="font-black text-lg tracking-tight">Guest User</p>
-                        <p class="text-[11px] text-blue-100 font-bold uppercase tracking-widest opacity-80">Welcome to CampusMart</p>
+                        <p class="font-black text-base tracking-tight">Guest User</p>
+                        <p class="text-[10px] text-blue-100 font-bold uppercase tracking-widest opacity-80">Welcome</p>
                     @endauth
                 </div>
             </div>
         </div>
 
         <!-- Sidebar Navigation Items -->
-        <div class="p-6 space-y-2 flex-grow overflow-y-auto">
+        <div class="p-4 space-y-1 flex-grow overflow-y-auto">
             @php
                 $navItems = [
                     ['key' => 'home', 'label' => 'Home', 'href' => route('home'), 'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
@@ -197,9 +197,9 @@
                 @endphp
                 <a
                     href="{{ $item['href'] }}"
-                    class="flex items-center gap-4 px-5 py-4 rounded-2xl font-black transition-all duration-300 group {{ $isActive ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-xl shadow-blue-500/20' : 'text-gray-500 hover:bg-blue-50 hover:text-blue-700' }}"
+                    class="flex items-center gap-4 px-4 py-3.5 rounded-2xl font-black transition-all duration-300 group {{ $isActive ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/20' : 'text-gray-500 hover:bg-blue-50 hover:text-blue-700' }}"
                 >
-                    <div class="p-2 rounded-xl {{ $isActive ? 'bg-white/20' : 'bg-gray-100 group-hover:bg-blue-100' }} transition-colors">
+                    <div class="p-2 rounded-xl {{ $isActive ? 'bg-white/20' : 'bg-gray-100 group-hover:bg-blue-100' }} transition-colors shrink-0">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $item['icon'] }}" />
                         </svg>
@@ -207,39 +207,6 @@
                     <span class="tracking-tight">{{ $item['label'] }}</span>
                 </a>
             @endforeach
-        </div>
-
-        <!-- Sidebar Footer -->
-        <div class="p-6 border-t border-gray-100 bg-gray-50/50 shrink-0">
-            @auth
-            <a
-                href="{{ route('profile.edit') }}"
-                class="flex items-center gap-4 px-4 py-3 rounded-2xl mb-4 hover:bg-white hover:shadow-sm transition-all group"
-            >
-                <div class="h-10 w-10 rounded-xl bg-blue-100 flex items-center justify-center font-bold text-blue-600">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                </div>
-                <div>
-                    <p class="text-sm font-black text-gray-800 tracking-tight">Settings</p>
-                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Account & Security</p>
-                </div>
-            </a>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button
-                    type="submit"
-                    class="w-full flex items-center justify-center gap-3 px-4 py-4 rounded-2xl font-black text-red-600 bg-red-50 hover:bg-red-600 hover:text-white transition-all duration-300 shadow-sm"
-                >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-                    Logout
-                </button>
-            </form>
-            @else
-            <div class="grid grid-cols-2 gap-4">
-                <a href="{{ route('login') }}" class="flex items-center justify-center py-4 bg-blue-600 text-white rounded-2xl font-black text-sm shadow-lg shadow-blue-500/20">Login</a>
-                <a href="{{ route('register') }}" class="flex items-center justify-center py-4 bg-white border border-gray-200 text-blue-600 rounded-2xl font-black text-sm">Sign Up</a>
-            </div>
-            @endauth
         </div>
     </div>
 </div>

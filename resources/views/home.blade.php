@@ -1,15 +1,37 @@
 <x-app-layout>
+    <style>
+        .btn-glow:hover {
+            box-shadow: 0 0 25px rgba(79, 70, 229, 0.6);
+            transform: scale(1.05);
+        }
+        .btn-glow-yellow:hover {
+            box-shadow: 0 0 25px rgba(250, 204, 21, 0.6);
+            transform: scale(1.05);
+        }
+        .btn-glow-white:hover {
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+    </style>
+
     <div class="min-h-screen bg-[#0f172a] text-slate-200 font-sans pb-16">
         
         <div class="max-w-7xl mx-auto px-4 py-8">
+            @if(session('success'))
+                <div class="mb-6 p-4 bg-emerald-500/20 border border-emerald-500/50 rounded-2xl text-emerald-400 font-bold flex items-center gap-3 animate-bounce">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-8 relative rounded-[2.5rem] overflow-hidden bg-[#1e293b] h-[450px] shadow-2xl border border-slate-800">
                     <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1470" class="w-full h-full object-cover opacity-40">
                     <div class="absolute inset-0 flex flex-col justify-center items-center text-center p-6">
                         <h2 class="text-white text-4xl font-black mb-6 tracking-tighter">AUST Semester <span class="text-yellow-400">Survival</span> Kit</h2>
-                        <button class="bg-gradient-to-r from-indigo-600 to-blue-500 text-white px-10 py-4 rounded-2xl font-black text-xl shadow-xl hover:scale-105 transition-all">
+                        <a href="{{ route('products.post') }}" class="bg-gradient-to-r from-indigo-600 to-blue-500 text-white px-10 py-4 rounded-2xl font-black text-xl shadow-xl transition-all btn-glow inline-block">
                             POST AN AD FOR FREE →
-                        </button>
+                        </a>
                     </div>
                 </div>
 
@@ -38,7 +60,7 @@
                         </div>
                         @endforeach
                     </div>
-                    <button class="w-full mt-8 py-4 bg-yellow-400 text-black rounded-2xl font-black hover:bg-white transition-all shadow-lg shadow-yellow-500/10">
+                    <button class="w-full mt-8 py-4 bg-yellow-400 text-black rounded-2xl font-black hover:bg-white transition-all shadow-lg shadow-yellow-500/10 btn-glow-yellow">
                         View All Items
                     </button>
                 </div>
@@ -54,7 +76,7 @@
                         <p class="text-slate-400 text-sm italic">"Final Year Design Project (FYDP) fair starts this Thursday at the auditorium!"</p>
                     </div>
                 </div>
-                <button class="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-bold border border-white/10 transition-all text-sm whitespace-nowrap">
+                <button class="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-bold border border-white/10 transition-all text-sm whitespace-nowrap btn-glow-white">
                     See All News
                 </button>
             </div>
@@ -101,8 +123,8 @@
             <div class="text-center">
                 <h2 class="text-3xl font-black text-white mb-8 italic">Ready to make your first trade?</h2>
                 <div class="flex flex-col sm:flex-row justify-center gap-6">
-                    <button class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-12 py-5 rounded-2xl font-black shadow-xl hover:shadow-blue-500/20">I want to Buy</button>
-                    <button class="bg-white text-slate-900 px-12 py-5 rounded-2xl font-black shadow-xl hover:bg-slate-100">I want to Sell</button>
+                    <button class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-12 py-5 rounded-2xl font-black shadow-xl transition-all btn-glow">I want to Buy</button>
+                    <button class="bg-white text-slate-900 px-12 py-5 rounded-2xl font-black shadow-xl hover:bg-slate-100 transition-all btn-glow-white">I want to Sell</button>
                 </div>
             </div>
         </div>
