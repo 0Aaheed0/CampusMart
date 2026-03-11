@@ -37,6 +37,12 @@ Route::middleware(['auth', 'prevent-back'])->group(function () {
     // Home Dashboard
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+    // Products & Issues
+    Route::get('/available-products', function() { return view('home'); })->name('products.available');
+    Route::get('/post-product', function() { return view('home'); })->name('products.post');
+    Route::get('/report-issues', function() { return view('home'); })->name('issues.report');
+    Route::get('/help-board', function() { return view('home'); })->name('help.board');
+
     // Profile Management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

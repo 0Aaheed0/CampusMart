@@ -4,114 +4,246 @@
     <meta charset="UTF-8">
     <title>Login | CampusMart</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
-        * { box-sizing: border-box; }
         body {
-            margin: 0;
-            height: 100vh;
-            background: linear-gradient(to right, #e9f5ec, #d8f3dc);
-            display: flex;
-            justify-content: center;
-            align-items: center;
             font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
         }
-        .card {
-            background: white;
-            width: 380px;
-            padding: 35px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+
+        .blob {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.15;
+            top: -100px;
+            left: -100px;
+        }
+
+        .blob-2 {
+            bottom: -100px;
+            right: -100px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            top: auto;
+            left: auto;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 40px;
+            padding: 50px 40px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
-        .icon { font-size: 40px; color: #2d6a4f; margin-bottom: 10px; }
-        h2 { margin-bottom: 25px; color: #1b4332; }
-        input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            outline: none;
-            font-size: 14px;
+
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            color: #2563eb;
+            font-size: 2rem;
         }
-        .password-box { position: relative; }
-        .password-box i {
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1e3a8a;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group i {
             position: absolute;
-            right: 12px;
-            top: 40%;
+            left: 20px;
+            top: 50%;
             transform: translateY(-50%);
-            cursor: pointer;
-            color: #555;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #2d6a4f;
-            border: none;
-            color: white;
-            border-radius: 30px;
-            font-size: 16px;
-            cursor: pointer;
+            color: #94a3b8;
             transition: 0.3s;
         }
-        button:hover { background: #1b4332; }
-        .link { margin-top: 15px; font-size: 14px; }
-        .link a { color: #2d6a4f; text-decoration: none; font-weight: 500; }
-        
-        /* Error & Success Messages */
-        .alert {
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 13px;
+
+        input {
+            width: 100%;
+            padding: 15px 15px 15px 55px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            outline: none;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            color: #1e293b;
         }
-        .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+
+        input:focus {
+            background: white;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        input:focus + i {
+            color: #3b82f6;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #94a3b8;
+            transition: 0.3s;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.6), 0 15px 20px -3px rgba(37, 99, 235, 0.4);
+        }
+
+        .footer-links {
+            margin-top: 25px;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .footer-links a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+            text-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <div class="icon"><i class="fas fa-book-reader"></i></div>
+<div class="blob"></div>
+<div class="blob blob-2"></div>
+
+<div class="glass-card">
+    <div class="icon-circle">
+        <i class="fas fa-user-shield"></i>
+    </div>
     <h2>Login</h2>
 
     @if(session('error'))
         <div class="alert alert-error">
-            <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
+            <i class="fas fa-exclamation-circle"></i>
+            <span>{{ session('error') }}</span>
         </div>
     @endif
 
     @if(session('success'))
         <div class="alert alert-success">
-            <i class="fas fa-check-circle"></i> {{ session('success') }}
+            <i class="fas fa-check-circle"></i>
+            <span>{{ session('success') }}</span>
         </div>
     @endif
 
     <form method="POST" action="{{ route('login') }}">
         @csrf
-        <input type="email" name="email" placeholder="Email" required value="{{ old('email') }}">
-
-        <div class="password-box">
-            <input type="password" name="password" id="password" placeholder="Password" required>
-            <i class="fas fa-eye" onclick="togglePassword()"></i>
+        <div class="input-group">
+            <input type="email" name="email" placeholder="Email Address" required value="{{ old('email') }}">
+            <i class="fas fa-envelope"></i>
         </div>
 
-        <button type="submit">LOGIN</button>
+        <div class="input-group">
+            <input type="password" name="password" id="password" placeholder="Password" required>
+            <i class="fas fa-lock"></i>
+            <i class="fas fa-eye password-toggle" onclick="togglePassword()"></i>
+        </div>
+
+        <button type="submit">LOG IN</button>
     </form>
 
-    <div class="link">
-        Don’t have an account? <a href="{{ route('register') }}">Sign up</a>
+    <div class="footer-links">
+        Don't have an account? <a href="{{ route('register') }}">Create one</a>
     </div>
 </div>
 
 <script>
     function togglePassword() {
         const pass = document.getElementById('password');
-        pass.type = pass.type === 'password' ? 'text' : 'password';
+        const icon = document.querySelector('.password-toggle');
+        if (pass.type === 'password') {
+            pass.type = 'text';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            pass.type = 'password';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
     }
 </script>
 
