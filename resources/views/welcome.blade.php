@@ -1,235 +1,319 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Welcome | CampusMart</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<title>Welcome | CampusMart</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            overflow: hidden;
-            position: relative;
-        }
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        /* Decorative Background Elements */
-        .blob {
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
-            filter: blur(80px);
-            border-radius: 50%;
-            z-index: -1;
-            opacity: 0.2;
-            animation: move 20s infinite alternate;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-        .blob-2 {
-            bottom: -100px;
-            right: -100px;
-            background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
-            animation-delay: -10s;
-        }
+<style>
 
-        @keyframes move {
-            from { transform: translate(-10%, -10%) rotate(0deg); }
-            to { transform: translate(10%, 10%) rotate(360deg); }
-        }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
-        .glass-box {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            border-radius: 40px;
-            padding: 60px 40px;
-            width: 90%;
-            max-width: 500px;
-            text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-            transform: translateY(0);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+body{
+font-family:'Poppins',sans-serif;
+background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+position:relative;
+color:white;
+}
 
-        .glass-box:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 35px 60px -15px rgba(59, 130, 246, 0.2);
-            background: rgba(255, 255, 255, 0.5);
-        }
+/* glow background blobs */
 
-        .logo-container {
-            background: white;
-            width: 100px;
-            height: 100px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 30px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            padding: 15px;
-        }
+.blob{
+position:absolute;
+width:500px;
+height:500px;
+background:#3b82f6;
+filter:blur(140px);
+opacity:0.25;
+border-radius:50%;
+animation:move 20s infinite alternate;
+}
 
-        h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: #1e40af;
-            margin-bottom: 10px;
-            letter-spacing: -0.02em;
-        }
+.blob2{
+right:-150px;
+bottom:-150px;
+background:#22c55e;
+}
 
-        p {
-            color: #475569;
-            font-size: 1.1rem;
-            margin-bottom: 40px;
-            font-weight: 400;
-        }
+.blob3{
+left:-150px;
+top:-150px;
+background:#60a5fa;
+}
 
-        .btn-primary {
-            display: inline-block;
-            background: #2563eb;
-            color: white;
-            padding: 16px 40px;
-            border-radius: 20px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
-            width: 100%;
-        }
+@keyframes move{
+from{transform:translate(0,0)}
+to{transform:translate(80px,60px)}
+}
 
-        .btn-primary:hover {
-            background: #1d4ed8;
-            transform: scale(1.02);
-            box-shadow: 0 0 20px rgba(37, 99, 235, 0.6), 0 15px 20px -3px rgba(37, 99, 235, 0.5);
-        }
+/* floating academic icons */
 
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(30, 58, 138, 0.2);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            opacity: 0;
-            pointer-events: none;
-            transition: 0.4s ease;
-        }
+.icon{
+position:absolute;
+font-size:40px;
+opacity:0.15;
+animation:float 6s infinite alternate ease-in-out;
+}
 
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+.icon1{top:12%;left:10%;}
+.icon2{bottom:18%;left:15%;animation-delay:1s;}
+.icon3{top:18%;right:12%;animation-delay:2s;}
+.icon4{bottom:12%;right:18%;animation-delay:3s;}
 
-        .modal-content {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            padding: 40px;
-            border-radius: 35px;
-            width: 350px;
-            text-align: center;
-            transform: scale(0.9) translateY(20px);
-            transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 1px solid white;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.1);
-        }
+@keyframes float{
+from{transform:translateY(0)}
+to{transform:translateY(25px)}
+}
 
-        .modal-overlay.active .modal-content {
-            transform: scale(1) translateY(0);
-        }
+/* glass card */
 
-        .modal-btn {
-            display: block;
-            padding: 14px;
-            margin: 12px 0;
-            border-radius: 18px;
-            text-decoration: none;
-            font-weight: 700;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+.glass-box{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(25px);
+border:1px solid rgba(255,255,255,0.15);
+border-radius:30px;
+padding:60px 45px;
+width:90%;
+max-width:520px;
+text-align:center;
+box-shadow:0 40px 80px rgba(0,0,0,0.4);
+transition:0.4s;
+}
 
-        .login-btn {
-            background: #2563eb;
-            color: white;
-            box-shadow: 0 8px 15px rgba(37, 99, 235, 0.2);
-        }
+.glass-box:hover{
+transform:translateY(-8px);
+box-shadow:0 60px 100px rgba(0,0,0,0.5);
+}
 
-        .login-btn:hover {
-            box-shadow: 0 0 20px rgba(37, 99, 235, 0.6);
-            transform: scale(1.05);
-        }
+/* logo */
 
-        .signup-btn {
-            background: white;
-            color: #1e40af;
-            border: 1px solid #bfdbfe;
-        }
+.logo-box{
+width:90px;
+height:90px;
+margin:auto;
+margin-bottom:25px;
+background:white;
+border-radius:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:10px;
+}
 
-        .signup-btn:hover {
-            box-shadow: 0 0 20px rgba(191, 219, 254, 0.6);
-            transform: scale(1.05);
-            background: #f8fafc;
-        }
+.logo-box img{
+width:100%;
+}
 
-        .cancel-btn {
-            color: #94a3b8;
-            font-size: 0.9rem;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: 0.3s;
-        }
+/* title */
 
-        .cancel-btn:hover {
-            color: #64748b;
-            text-shadow: 0 0 10px rgba(148, 163, 184, 0.4);
-        }
-    </style>
+h1{
+font-size:3rem;
+font-weight:800;
+letter-spacing:1px;
+margin-bottom:8px;
+}
+
+.subtitle{
+font-size:1.2rem;
+color:#93c5fd;
+margin-bottom:10px;
+font-weight:600;
+}
+
+.desc{
+font-size:1rem;
+color:#cbd5f5;
+margin-bottom:35px;
+line-height:1.6;
+}
+
+/* button */
+
+.btn-main{
+background:linear-gradient(135deg,#2563eb,#3b82f6);
+border:none;
+padding:16px 35px;
+border-radius:15px;
+font-weight:700;
+font-size:1rem;
+color:white;
+cursor:pointer;
+width:100%;
+transition:0.3s;
+box-shadow:0 10px 25px rgba(37,99,235,0.5);
+}
+
+.btn-main:hover{
+transform:scale(1.05);
+box-shadow:0 0 20px rgba(59,130,246,0.9);
+}
+
+/* modal */
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(10px);
+display:flex;
+align-items:center;
+justify-content:center;
+opacity:0;
+pointer-events:none;
+transition:0.3s;
+}
+
+.modal.active{
+opacity:1;
+pointer-events:auto;
+}
+
+.modal-box{
+background:rgba(255,255,255,0.95);
+color:#1e293b;
+padding:40px;
+border-radius:25px;
+text-align:center;
+width:320px;
+transform:scale(0.85);
+transition:0.3s;
+}
+
+.modal.active .modal-box{
+transform:scale(1);
+}
+
+.modal-box h2{
+margin-bottom:20px;
+font-weight:800;
+}
+
+.modal-btn{
+display:block;
+padding:13px;
+border-radius:12px;
+margin:10px 0;
+font-weight:700;
+text-decoration:none;
+}
+
+.login{
+background:#2563eb;
+color:white;
+}
+
+.signup{
+background:#f1f5f9;
+color:#1e3a8a;
+border:1px solid #cbd5f5;
+}
+
+.modal-btn:hover{
+transform:scale(1.05);
+}
+
+.cancel{
+margin-top:10px;
+font-size:0.9rem;
+cursor:pointer;
+color:#64748b;
+}
+
+.cancel:hover{
+color:#0f172a;
+}
+
+</style>
 </head>
+
 <body>
 
+<!-- background blobs -->
+
+<div class="blob blob3"></div>
 <div class="blob"></div>
-<div class="blob blob-2"></div>
+<div class="blob blob2"></div>
+
+<!-- floating icons -->
+
+<i class="fa-solid fa-book icon icon1"></i>
+<i class="fa-solid fa-pencil icon icon2"></i>
+<i class="fa-solid fa-cart-shopping icon icon3"></i>
+<i class="fa-solid fa-graduation-cap icon icon4"></i>
+
+<!-- main glass card -->
 
 <div class="glass-box">
-    <div class="logo-container">
-        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-full h-auto">
-    </div>
-    <h1>WELCOME</h1>
-    <p>Your Campus Marketplace for everything.</p>
-    <button class="btn-primary" onclick="openModal()">Get Started</button>
+
+<div class="logo-box">
+<img src="{{ asset('images/logo.png') }}" alt="CampusMart Logo">
 </div>
 
-<div class="modal-overlay" id="modal">
-    <div class="modal-content">
-        <h2 class="text-2xl font-black text-blue-900 mb-6">Join Us</h2>
-        <a href="{{ route('login') }}" class="modal-btn login-btn">LOGIN</a>
-        <a href="{{ route('register') }}" class="modal-btn signup-btn">SIGN UP</a>
-        <div class="cancel-btn font-bold" onclick="closeModal()">Cancel</div>
-    </div>
+<h1>CampusMart</h1>
+
+<div class="subtitle">
+Buy • Sell • Exchange
+</div>
+
+<div class="desc">
+The student marketplace where you can buy and sell books,
+notes, and stationery within your campus community.
+</div>
+
+<button class="btn-main" onclick="openModal()">
+Get Started
+</button>
+
+</div>
+
+<!-- modal -->
+
+<div class="modal" id="modal">
+
+<div class="modal-box">
+
+<h2>Join CampusMart</h2>
+
+<a href="{{ route('login') }}" class="modal-btn login">
+LOGIN
+</a>
+
+<a href="{{ route('register') }}" class="modal-btn signup">
+SIGN UP
+</a>
+
+<div class="cancel" onclick="closeModal()">
+Cancel
+</div>
+
+</div>
+
 </div>
 
 <script>
-    function openModal() {
-        document.getElementById('modal').classList.add('active');
-    }
 
-    function closeModal() {
-        document.getElementById('modal').classList.remove('active');
-    }
+function openModal(){
+document.getElementById('modal').classList.add('active');
+}
+
+function closeModal(){
+document.getElementById('modal').classList.remove('active');
+}
+
 </script>
 
 </body>
