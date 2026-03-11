@@ -9,50 +9,67 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+            background: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0;
             overflow: hidden;
             position: relative;
+            color: white;
         }
 
+        /* glow blobs */
         .blob {
             position: absolute;
-            width: 400px;
-            height: 400px;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            filter: blur(80px);
+            width: 500px;
+            height: 500px;
+            background: #3b82f6;
+            filter: blur(140px);
+            opacity: 0.25;
             border-radius: 50%;
-            z-index: -1;
-            opacity: 0.15;
-            top: -100px;
-            left: -100px;
+            animation: move 20s infinite alternate;
+            z-index: 0;
         }
 
-        .blob-2 {
-            bottom: -100px;
-            right: -100px;
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-            top: auto;
-            left: auto;
+        .blob2 {
+            right: -150px;
+            bottom: -150px;
+            background: #22c55e;
         }
 
+        .blob3 {
+            left: -150px;
+            top: -150px;
+            background: #60a5fa;
+        }
+
+        @keyframes move {
+            from { transform: translate(0, 0) }
+            to { transform: translate(80px, 60px) }
+        }
+
+        /* glass card */
         .glass-card {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            border-radius: 40px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
             padding: 50px 40px;
             width: 90%;
             max-width: 450px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
             text-align: center;
+            position: relative;
+            z-index: 1;
         }
 
         .icon-circle {
@@ -64,7 +81,6 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto 25px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             color: #2563eb;
             font-size: 2rem;
         }
@@ -72,7 +88,6 @@
         h2 {
             font-size: 2rem;
             font-weight: 800;
-            color: #1e3a8a;
             margin-bottom: 30px;
         }
 
@@ -81,35 +96,31 @@
             margin-bottom: 20px;
         }
 
-        .input-group i {
+        .input-group i:not(.password-toggle) {
             position: absolute;
             left: 20px;
             top: 50%;
             transform: translateY(-50%);
             color: #94a3b8;
-            transition: 0.3s;
         }
 
         input {
             width: 100%;
             padding: 15px 15px 15px 55px;
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 20px;
+            border: none;
             outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
             font-size: 0.95rem;
-            transition: all 0.3s;
-            color: #1e293b;
+        }
+
+        input::placeholder {
+            color: #cbd5f5;
         }
 
         input:focus {
-            background: white;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-        }
-
-        input:focus + i {
-            color: #3b82f6;
+            background: rgba(255, 255, 255, 0.25);
         }
 
         .password-toggle {
@@ -118,48 +129,43 @@
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            color: #94a3b8;
-            transition: 0.3s;
+            color: #cbd5f5;
         }
 
         button {
             width: 100%;
             padding: 16px;
-            background: #2563eb;
-            color: white;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
             border: none;
             border-radius: 20px;
-            font-size: 1rem;
+            color: white;
             font-weight: 700;
+            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
             margin-top: 10px;
+            transition: 0.3s;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5);
         }
 
         button:hover {
-            background: #1d4ed8;
-            transform: translateY(-2px);
-            box-shadow: 0 0 20px rgba(37, 99, 235, 0.6), 0 15px 20px -3px rgba(37, 99, 235, 0.4);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.9);
         }
 
         .footer-links {
             margin-top: 25px;
             font-size: 0.9rem;
-            color: #64748b;
+            color: #cbd5f5;
         }
 
         .footer-links a {
-            color: #2563eb;
-            text-decoration: none;
+            color: #93c5fd;
             font-weight: 700;
-            transition: 0.3s;
+            text-decoration: none;
         }
 
         .footer-links a:hover {
-            color: #1d4ed8;
             text-decoration: underline;
-            text-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
         }
 
         .alert {
@@ -175,22 +181,23 @@
         }
 
         .alert-error {
-            background: rgba(239, 68, 68, 0.1);
-            color: #dc2626;
+            background: rgba(239, 68, 68, 0.15);
+            color: #fecaca;
             border: 1px solid rgba(239, 68, 68, 0.2);
         }
 
         .alert-success {
-            background: rgba(34, 197, 94, 0.1);
-            color: #16a34a;
+            background: rgba(34, 197, 94, 0.15);
+            color: #bbf7d0;
             border: 1px solid rgba(34, 197, 94, 0.2);
         }
     </style>
 </head>
 <body>
 
+<div class="blob blob3"></div>
 <div class="blob"></div>
-<div class="blob blob-2"></div>
+<div class="blob blob2"></div>
 
 <div class="glass-card">
     <div class="icon-circle">

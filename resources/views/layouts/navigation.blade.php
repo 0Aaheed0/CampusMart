@@ -29,7 +29,7 @@
                                 class="h-8 w-auto"
                             />
                         </div>
-                        <span class="font-monsta tracking-[0.25em] text-2xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] hidden sm:block">
+                        <span class="font-monsta tracking-[0.1em] text-3xl md:text-4xl text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] hidden sm:block font-black italic">
                             CampusMart
                         </span>
                     </a>
@@ -137,50 +137,27 @@
         x-transition:leave="transition transform duration-500"
         x-transition:leave-start="translate-x-0"
         x-transition:leave-end="-translate-x-full"
-        class="fixed top-0 left-0 h-screen w-80 bg-white text-gray-800 shadow-[20px_0_60px_-15px_rgba(0,0,0,0.3)] z-[110] overflow-y-auto flex flex-col"
+        class="fixed top-0 left-0 h-screen w-80 bg-[#0f172a] text-slate-200 shadow-[20px_0_60px_-15px_rgba(0,0,0,0.5)] z-[110] overflow-y-auto flex flex-col border-r border-slate-800"
         style="display: none;"
     >
         <!-- Sidebar Header -->
-        <div class="p-6 bg-gradient-to-br from-blue-700 to-indigo-800 text-white relative overflow-hidden shrink-0">
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full"></div>
-            <div class="flex items-center justify-between mb-6 relative z-10">
+        <div class="p-8 bg-gradient-to-b from-blue-600/20 to-transparent relative overflow-hidden shrink-0">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
+            <div class="flex items-center justify-between relative z-10">
                 <div class="flex items-center gap-3">
-                    <div class="p-1.5 bg-white rounded-xl shadow-lg">
-                        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-6">
+                    <div>
+                        <span class="font-monsta text-2xl tracking-[0.2em] block font-black">MENU</span>
+                        <div class="h-1 w-12 bg-blue-500 rounded-full mt-1"></div>
                     </div>
-                    <span class="font-monsta text-lg tracking-[0.2em]">MENU</span>
                 </div>
-                <button @click="sidebarOpen = false" class="p-2 hover:bg-white/20 rounded-xl transition-all active:scale-90">
+                <button @click="sidebarOpen = false" class="p-2 hover:bg-white/10 rounded-xl transition-all active:scale-90 text-slate-400 hover:text-white">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
-            </div>
-            
-            <div class="flex items-center gap-4 relative z-10">
-                <div class="h-12 w-12 rounded-2xl bg-white/20 border-2 border-white/50 flex items-center justify-center font-black text-xl shadow-xl overflow-hidden shrink-0">
-                    @auth
-                        @if(Auth::user()->profile && Auth::user()->profile->profile_picture)
-                            <img src="{{ asset('storage/' . Auth::user()->profile->profile_picture) }}" alt="Avatar" class="h-full w-full object-cover">
-                        @else
-                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                        @endif
-                    @else
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                    @endauth
-                </div>
-                <div class="min-w-0">
-                    @auth
-                        <p class="font-black text-base truncate w-40 tracking-tight">{{ Auth::user()->name }}</p>
-                        <p class="text-[10px] text-blue-100 font-bold uppercase tracking-widest opacity-80 truncate w-40">{{ Auth::user()->email }}</p>
-                    @else
-                        <p class="font-black text-base tracking-tight">Guest User</p>
-                        <p class="text-[10px] text-blue-100 font-bold uppercase tracking-widest opacity-80">Welcome</p>
-                    @endauth
-                </div>
             </div>
         </div>
 
         <!-- Sidebar Navigation Items -->
-        <div class="p-4 space-y-1 flex-grow overflow-y-auto">
+        <div class="px-4 py-2 space-y-2 flex-grow overflow-y-auto">
             @php
                 $navItems = [
                     ['key' => 'home', 'label' => 'Home', 'href' => route('home'), 'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
@@ -197,16 +174,31 @@
                 @endphp
                 <a
                     href="{{ $item['href'] }}"
-                    class="flex items-center gap-4 px-4 py-3.5 rounded-2xl font-black transition-all duration-300 group {{ $isActive ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/20' : 'text-gray-500 hover:bg-blue-50 hover:text-blue-700' }}"
+                    class="flex items-center gap-4 px-5 py-4 rounded-[2rem] font-bold transition-all duration-300 group {{ $isActive ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}"
                 >
-                    <div class="p-2 rounded-xl {{ $isActive ? 'bg-white/20' : 'bg-gray-100 group-hover:bg-blue-100' }} transition-colors shrink-0">
+                    <div class="p-2 rounded-xl {{ $isActive ? 'bg-white/20' : 'bg-slate-800 group-hover:bg-blue-600/20' }} transition-colors shrink-0">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $item['icon'] }}" />
                         </svg>
                     </div>
-                    <span class="tracking-tight">{{ $item['label'] }}</span>
+                    <span class="tracking-wide">{{ $item['label'] }}</span>
                 </a>
             @endforeach
         </div>
+
+        @auth
+        <!-- Logout at bottom -->
+        <div class="p-4 border-t border-slate-800">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="w-full flex items-center gap-4 px-5 py-4 rounded-[2rem] font-bold text-red-400 hover:bg-red-500/10 transition-all group">
+                    <div class="p-2 rounded-xl bg-red-500/10 group-hover:bg-red-500 group-hover:text-white transition-all shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                    </div>
+                    Logout
+                </button>
+            </form>
+        </div>
+        @endauth
     </div>
 </div>
