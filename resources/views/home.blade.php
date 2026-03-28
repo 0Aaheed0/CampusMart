@@ -415,4 +415,183 @@ I Want to Sell
 
 </div>
 
+
+<!-- MEET THE TEAM SECTION -->
+<div class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 py-24 px-6">
+    <!-- Decorative Background Circles -->
+    <div class="absolute top-0 left-0 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
+    <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-purple-600/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+
+    <div class="max-w-7xl mx-auto relative z-10">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <span class="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-6">
+                ✦ The People Behind CampusMart
+            </span>
+            <h2 class="text-5xl font-black text-white mb-4">
+                Meet the <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">Team</span>
+            </h2>
+            <p class="text-slate-400 text-lg max-w-xl mx-auto">
+                The passionate minds dedicated to making campus trading easier and more accessible for every student.
+            </p>
+        </div>
+
+        <!-- Team Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            <!-- Yousha Shahid -->
+            <div class="group relative bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-sm rounded-[2rem] border border-white/10 p-8 text-center transition-all duration-300 hover:border-blue-400/50 hover:from-white/15 hover:to-white/10 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/20">
+                <div class="relative mx-auto mb-6 w-20 h-20">
+                    <div class="absolute inset-0 rounded-full border-2 border-blue-400/50 group-hover:border-blue-400 transition-colors duration-300"></div>
+                    <div class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-3xl shadow-lg shadow-blue-500/30">
+                        Y
+                    </div>
+                </div>
+                <h3 class="text-white font-black text-xl mb-1 group-hover:text-blue-300 transition-colors">Yousha Shahid</h3>
+
+                <div class="w-12 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent mx-auto mb-5"></div>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 text-left">
+                        <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-4 h-4 text-blue-300">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 text-[10px] uppercase tracking-wider block">Phone</span>
+                            <span class="text-white/80 text-xs font-medium break-all">01621922735</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 text-left">
+                        <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-4 h-4 text-blue-300">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 text-[10px] uppercase tracking-wider block">Email</span>
+                            <span class="text-white/80 text-xs font-medium break-all">yousha.cse.20230104097@aust.edu</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aaheed Bin Ashraf -->
+            <div class="group relative bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-sm rounded-[2rem] border border-white/10 p-8 text-center transition-all duration-300 hover:border-blue-400/50 hover:from-white/15 hover:to-white/10 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/20">
+                <div class="relative mx-auto mb-6 w-20 h-20">
+                    <div class="absolute inset-0 rounded-full border-2 border-blue-400/50 group-hover:border-blue-400 transition-colors duration-300"></div>
+                    <div class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-3xl shadow-lg shadow-blue-500/30">
+                        A
+                    </div>
+                </div>
+                <h3 class="text-white font-black text-xl mb-1 group-hover:text-blue-300 transition-colors">Aaheed Bin Ashraf</h3>
+
+                <div class="w-12 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent mx-auto mb-5"></div>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 text-left">
+                        <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-4 h-4 text-blue-300">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 text-[10px] uppercase tracking-wider block">Phone</span>
+                            <span class="text-white/80 text-xs font-medium break-all">01762533535</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 text-left">
+                        <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-4 h-4 text-blue-300">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 text-[10px] uppercase tracking-wider block">Email</span>
+                            <span class="text-white/80 text-xs font-medium break-all">aaheed.cse.20230104094@aust.edu</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Abdullah Al Noman -->
+            <div class="group relative bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-sm rounded-[2rem] border border-white/10 p-8 text-center transition-all duration-300 hover:border-blue-400/50 hover:from-white/15 hover:to-white/10 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/20">
+                <div class="relative mx-auto mb-6 w-20 h-20">
+                    <div class="absolute inset-0 rounded-full border-2 border-blue-400/50 group-hover:border-blue-400 transition-colors duration-300"></div>
+                    <div class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-3xl shadow-lg shadow-blue-500/30">
+                        A
+                    </div>
+                </div>
+                <h3 class="text-white font-black text-xl mb-1 group-hover:text-blue-300 transition-colors">Abdullah Al Noman</h3>
+
+                <div class="w-12 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent mx-auto mb-5"></div>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 text-left">
+                        <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-4 h-4 text-blue-300">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 text-[10px] uppercase tracking-wider block">Phone</span>
+                            <span class="text-white/80 text-xs font-medium break-all">01748606355</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 text-left">
+                        <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-4 h-4 text-blue-300">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 text-[10px] uppercase tracking-wider block">Email</span>
+                            <span class="text-white/80 text-xs font-medium break-all">noman.cse.20230104088@aust.edu</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Miraz -->
+            <div class="group relative bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-sm rounded-[2rem] border border-white/10 p-8 text-center transition-all duration-300 hover:border-blue-400/50 hover:from-white/15 hover:to-white/10 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/20">
+                <div class="relative mx-auto mb-6 w-20 h-20">
+                    <div class="absolute inset-0 rounded-full border-2 border-blue-400/50 group-hover:border-blue-400 transition-colors duration-300"></div>
+                    <div class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-3xl shadow-lg shadow-blue-500/30">
+                        M
+                    </div>
+                </div>
+                <h3 class="text-white font-black text-xl mb-1 group-hover:text-blue-300 transition-colors">GR Miraz</h3>
+                <div class="w-12 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent mx-auto mb-5"></div>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 text-left">
+                        <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0 opacity-50">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-4 h-4 text-blue-300">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 text-[10px] uppercase tracking-wider block">Phone</span>
+                            <span class="text-white/40 text-xs font-medium italic">01616561269</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 text-left">
+                        <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-4 h-4 text-blue-300">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 text-[10px] uppercase tracking-wider block">Email</span>
+                            <span class="text-white/80 text-xs font-medium break-all">miraz.cse.20230104092@aust.edu</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-16 pt-8 border-t border-white/10 text-center text-slate-500 text-sm">
+            © 2025 CampusMart · Built with ❤️ by AUST CSE Students
+        </div>
+    </div>
+</div>
+
 </x-app-layout>

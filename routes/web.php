@@ -33,7 +33,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'prevent-back'])->group(function () {
-    
+
     // Home Dashboard
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
@@ -42,11 +42,11 @@ Route::middleware(['auth', 'prevent-back'])->group(function () {
     Route::get('/post-product', [\App\Http\Controllers\ProductController::class, 'create'])->name('products.post');
     Route::post('/post-product', [\App\Http\Controllers\ProductController::class, 'store'])->name('products.store');
     Route::get('/report-issues', function() { return view('home'); })->name('issues.report');
-    Route::get('/help-board', function() { return view('home'); })->name('help.board');
+    Route::get('/help-board', [\App\Http\Controllers\HelpBoardController::class, 'index'])->name('help.board');
 
     // Profile Management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
+
 });
