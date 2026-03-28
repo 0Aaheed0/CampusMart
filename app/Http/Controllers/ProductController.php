@@ -9,6 +9,26 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    public function index(Request $request)
+    {
+        $query = PostProduct::where('status', 'available')
+            ->with('user')
+            ->orderBy('created_at', 'desc');
+
+        if ($request->has('category') && $request->category != 'All') {
+            $query->where('product_type', $request->category);
+        }
+
+        $products = $query->paginate(12)->withQueryString();
+
+        $categories = PostProduct::where('status', 'available')
+            ->pluck('product_type')
+            ->unique()
+            ->values();
+
+        return view('products.available', compact('products', 'categories'));
+    }
+
     public function create()
     {
         return view('products.create');
@@ -46,6 +66,6 @@ class ProductController extends Controller
 
         PostProduct::create($data);
 
-        return redirect()->route('home')->with('success', 'Product posted successfully!');
+        return redirect()->route('products.available')->with('success', 'Product posted successfully!');
     }
 }
