@@ -90,14 +90,20 @@ class AuthController extends Controller
             'password.min' => 'The password must be at least 8 characters.'
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        // Redirect to login page with a success message instead of logging in automatically
-        return redirect()->route('login')->with('success', 'Registration successful! Please login.');
+        // Automatically log in the user after registration
+        $token = Auth::attempt([
+            'email' => $request->email,
+            'password' => $request->password,
+        ]);
+
+        // Set the JWT token in a cookie and go to home
+        return redirect('/home')->withCookie(cookie('token', $token, config('jwt.ttl')));
     }
 
     /**

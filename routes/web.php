@@ -38,7 +38,7 @@ Route::middleware(['auth', 'prevent-back'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     // Products & Issues
-    Route::get('/available-products', function() { return view('home'); })->name('products.available');
+    Route::get('/available-products', [\App\Http\Controllers\ProductController::class, 'index'])->name('products.available');
     Route::get('/post-product', [\App\Http\Controllers\ProductController::class, 'create'])->name('products.post');
     Route::post('/post-product', [\App\Http\Controllers\ProductController::class, 'store'])->name('products.store');
     Route::get('/report-issues', function() { return view('home'); })->name('issues.report');
