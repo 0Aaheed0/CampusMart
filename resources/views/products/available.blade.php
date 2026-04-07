@@ -1,5 +1,28 @@
 <x-app-layout>
     <style>
+        .page-bg {
+            background: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
+        }
+
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: #3b82f6;
+            filter: blur(140px);
+            opacity: 0.15;
+            border-radius: 50%;
+            animation: move 20s infinite alternate;
+        }
+
+        .blob2 { right: -150px; bottom: -150px; background: #22c55e; }
+        .blob3 { left: -150px; top: -150px; background: #60a5fa; }
+
+        @keyframes move {
+            from { transform: translate(0, 0) }
+            to { transform: translate(80px, 60px) }
+        }
+
         .product-card {
             transition: all 0.3s ease;
             background: white;
@@ -43,21 +66,26 @@
         }
     </style>
 
-    <div class="py-12 bg-gradient-to-br from-blue-50 via-white to-indigo-50 min-h-screen">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="py-12 page-bg min-h-screen relative overflow-hidden">
+        <!-- Background Blobs -->
+        <div class="blob blob3"></div>
+        <div class="blob"></div>
+        <div class="blob blob2"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <!-- Header -->
             <div class="mb-8">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
                     <div>
-                        <h1 class="text-4xl font-black text-blue-900 tracking-tight">Available Products</h1>
-                        <p class="text-blue-600 mt-2">Browse and find what you need from your fellow AUST students</p>
+                        <h1 class="text-4xl font-black text-white tracking-tight">Available Products</h1>
+                        <p class="text-blue-100 mt-2">Browse and find what you need from your fellow AUST students</p>
                     </div>
-                    <a href="{{ route('products.post') }}" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg">+ Post Product</a>
+                    <a href="{{ route('products.post') }}" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-bold hover:bg-blue-50 transition shadow-lg">+ Post Product</a>
                 </div>
 
                 <!-- Success Message -->
                 @if(session('success'))
-                    <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded-xl">
                         <div class="flex">
                             <div class="flex-shrink-0">
                                 <svg class="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
@@ -74,12 +102,12 @@
                 <!-- Category Filters -->
                 <div class="flex flex-wrap gap-3 mb-8">
                     <a href="{{ route('products.available') }}" 
-                       class="px-5 py-2 rounded-full font-bold transition-all {{ !request('category') || request('category') == 'All' ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-blue-600 border border-blue-200 hover:bg-blue-50' }}">
+                       class="px-5 py-2 rounded-full font-bold transition-all {{ !request('category') || request('category') == 'All' ? 'bg-white text-blue-600 shadow-md' : 'bg-white/10 text-white border border-white/20 hover:bg-white/20' }}">
                         All
                     </a>
                     @foreach($categories as $category)
                         <a href="{{ route('products.available', ['category' => $category]) }}" 
-                           class="px-5 py-2 rounded-full font-bold transition-all {{ request('category') == $category ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-blue-600 border border-blue-200 hover:bg-blue-50' }}">
+                           class="px-5 py-2 rounded-full font-bold transition-all {{ request('category') == $category ? 'bg-white text-blue-600 shadow-md' : 'bg-white/10 text-white border border-white/20 hover:bg-white/20' }}">
                             {{ $category }}
                         </a>
                     @endforeach
@@ -89,12 +117,12 @@
             <!-- No Products -->
             @if($products->isEmpty())
                 <div class="text-center py-12">
-                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="mx-auto h-12 w-12 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                     </svg>
-                    <h3 class="mt-4 text-lg font-medium text-gray-900">No products available yet</h3>
-                    <p class="mt-2 text-gray-500 mb-6">Be the first to post a product!</p>
-                    <a href="{{ route('products.post') }}" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition">Post the First Product</a>
+                    <h3 class="mt-4 text-lg font-medium text-white">No products available yet</h3>
+                    <p class="mt-2 text-blue-200 mb-6">Be the first to post a product!</p>
+                    <a href="{{ route('products.post') }}" class="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-bold hover:bg-blue-50 transition shadow-lg">Post the First Product</a>
                 </div>
             @else
                 <!-- Products Grid -->
