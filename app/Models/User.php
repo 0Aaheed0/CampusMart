@@ -15,6 +15,9 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'phone',
+        'avatar',
+        'role',
     ];
 
     protected $hidden = [
@@ -40,7 +43,12 @@ class User extends Authenticatable implements JWTSubject
 
     public function profile()
     {
-    // This connects the User to the Profile table
-    return $this->hasOne(Profile::class);
+        // This connects the User to the Profile table
+        return $this->hasOne(Profile::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(PostProduct::class);
     }
 }

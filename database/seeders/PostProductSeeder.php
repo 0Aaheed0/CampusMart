@@ -13,17 +13,23 @@ class PostProductSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::first();
+        $users = User::all();
 
-        if (!$user) {
+        if ($users->isEmpty()) {
             $user = User::factory()->create([
                 'name' => 'CampusMart Admin',
                 'email' => 'admin@aust.edu',
                 'password' => bcrypt('password'),
             ]);
+            $users = collect([$user]);
         }
 
         $products = [
+            // ... (keep the same product list)
+        ];
+
+        // I will just replace the whole loop and logic to be cleaner
+        $productData = [
             [
                 'product_name' => 'Casio Scientific Calculator fx-991EX',
                 'product_type' => 'Electronics',
@@ -166,7 +172,9 @@ class PostProductSeeder extends Seeder
             ],
         ];
 
-        foreach ($products as $product) {
+        foreach ($productData as $index => $product) {
+            // Cycle through users
+            $user = $users[$index % $users->count()];
             PostProduct::create(array_merge($product, ['user_id' => $user->id]));
         }
     }
