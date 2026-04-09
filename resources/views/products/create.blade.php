@@ -59,7 +59,11 @@
                                     <option value="Electronics" class="bg-slate-900">Electronics</option>
                                     <option value="Books" class="bg-slate-900">Books & Notes</option>
                                     <option value="Stationery" class="bg-slate-900">Stationery</option>
-                                    <option value="Hoodie" class="bg-slate-900">Hoodie</option>
+                                    <option value="Furniture" class="bg-slate-900">Furniture</option>
+                                    <option value="Household" class="bg-slate-900">Household</option>
+                                    <option value="Musical" class="bg-slate-900">Musical</option>
+                                    <option value="Fashion" class="bg-slate-900">Fashion</option>
+                                    <option value="Sports" class="bg-slate-900">Sports</option>
                                     <option value="Other" class="bg-slate-900">Other</option>
                                 </select>
                                 <x-input-error class="mt-2" :messages="$errors->get('product_type')" />
@@ -99,9 +103,22 @@
                                 <x-text-input id="contact_number" name="contact_number" type="text" class="mt-2 block w-full rounded-2xl border-white/10 bg-white/5 focus:bg-white/10 focus:ring-blue-500/20 transition-all font-bold text-white" value="{{ Auth::user()->profile->number ?? '' }}" required />
                             </div>
 
+                            <!-- Image Input: Either Upload or URL -->
                             <div>
-                                <x-input-label for="product_image" :value="__('Product Image')" class="text-[11px] font-black text-blue-300/60 uppercase ml-1 tracking-widest" />
-                                <div class="mt-2 flex items-center justify-center w-full relative">
+                                <x-input-label for="image_source" :value="__('Product Image')" class="text-[11px] font-black text-blue-300/60 uppercase ml-1 tracking-widest" />
+                                
+                                <!-- Toggle Buttons -->
+                                <div class="mt-2 flex gap-3 mb-4">
+                                    <button type="button" id="toggle-upload" class="flex-1 px-4 py-2 rounded-xl bg-blue-600 text-white font-bold transition-all active-tab" onclick="toggleImageSource('upload')">
+                                        📤 Upload Image
+                                    </button>
+                                    <button type="button" id="toggle-url" class="flex-1 px-4 py-2 rounded-xl bg-white/10 text-blue-300 font-bold transition-all" onclick="toggleImageSource('url')">
+                                        🔗 Image URL
+                                    </button>
+                                </div>
+
+                                <!-- Upload Section -->
+                                <div id="upload-section" class="mt-2 flex items-center justify-center w-full relative">
                                     <label for="product_image" class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-white/10 rounded-2xl cursor-pointer bg-white/5 hover:bg-white/10 transition-all overflow-hidden relative group/upload">
                                         <div id="upload-prompt" class="flex flex-col items-center justify-center pt-5 pb-6">
                                             <svg class="w-8 h-8 mb-3 text-blue-400 group-hover/upload:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
@@ -113,6 +130,12 @@
                                     <button type="button" id="remove-image" onclick="clearImagePreview()" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-lg hidden hover:bg-red-600 transition-colors z-20">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                     </button>
+                                </div>
+
+                                <!-- URL Section (Hidden by default) -->
+                                <div id="url-section" class="hidden">
+                                    <x-text-input id="product_image_url" name="product_image_url" type="url" class="block w-full rounded-2xl border-white/10 bg-white/5 focus:bg-white/10 focus:ring-blue-500/20 transition-all font-bold text-white placeholder-slate-500" placeholder="https://images.unsplash.com/photo-..." />
+                                    <p class="text-xs text-blue-300 mt-2">Paste an image URL (jpg, png, or from Unsplash)</p>
                                 </div>
                             </div>
                         </div>
@@ -157,6 +180,31 @@
             preview.classList.add('hidden');
             prompt.classList.remove('hidden');
             removeBtn.classList.add('hidden');
+        }
+
+        function toggleImageSource(source) {
+            const uploadSection = document.getElementById('upload-section');
+            const urlSection = document.getElementById('url-section');
+            const toggleUpload = document.getElementById('toggle-upload');
+            const toggleUrl = document.getElementById('toggle-url');
+
+            if (source === 'upload') {
+                uploadSection.classList.remove('hidden');
+                urlSection.classList.add('hidden');
+                toggleUpload.classList.add('bg-blue-600', 'text-white');
+                toggleUpload.classList.remove('bg-white/10', 'text-blue-300');
+                toggleUrl.classList.remove('bg-blue-600', 'text-white');
+                toggleUrl.classList.add('bg-white/10', 'text-blue-300');
+                document.getElementById('product_image_url').value = '';
+            } else {
+                uploadSection.classList.add('hidden');
+                urlSection.classList.remove('hidden');
+                toggleUpload.classList.remove('bg-blue-600', 'text-white');
+                toggleUpload.classList.add('bg-white/10', 'text-blue-300');
+                toggleUrl.classList.add('bg-blue-600', 'text-white');
+                toggleUrl.classList.remove('bg-white/10', 'text-blue-300');
+                clearImagePreview();
+            }
         }
     </script>
 </x-app-layout>

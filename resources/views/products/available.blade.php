@@ -237,7 +237,7 @@
                             <!-- Image Container -->
                             <div class="product-image-container">
                                 @if($product->product_image)
-                                    <img src="{{ asset('storage/' . $product->product_image) }}" alt="{{ $product->product_name }}" class="product-image">
+                                    <img src="{{ str_starts_with($product->product_image, 'http') ? $product->product_image : asset('storage/' . $product->product_image) }}" alt="{{ $product->product_name }}" class="product-image">
                                 @else
                                     <div class="placeholder-image">
                                         <svg class="h-16 w-16 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -296,7 +296,9 @@
                                                 {{ substr($product->user->name ?? 'C', 0, 1) }}
                                             </div>
                                             <div>
-                                                <p class="text-sm font-bold text-gray-900 leading-none mb-1">{{ $product->user->name ?? 'CampusMart Admin' }}</p>
+                                                <p class="text-sm font-bold text-gray-900 leading-none mb-1 cursor-pointer hover:text-blue-700 transition" onclick="openUserProfile({{ $product->user->id }})">
+                                                    {{ $product->user->name ?? 'CampusMart Admin' }}
+                                                </p>
                                                 <p class="text-[10px] text-blue-600 font-bold uppercase tracking-widest">POSTER</p>
                                             </div>
                                         </div>
@@ -393,6 +395,96 @@
                             }
                         }
                     });
+
+                    // User Profile Modal
+                    function openUserProfile(userId) {
+                        const modal = document.getElementById('userProfileModal');
+                        const content = document.getElementById('userProfileContent');
+                        content.innerHTML = '<div class="flex justify-center items-center h-32"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>';
+                        modal.classList.remove('hidden');
+
+                        fetch(`/user/${userId}/popup`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    const user = data.user;
+                                    content.innerHTML = `
+                                        <div class="space-y-4">
+                                            <div class="flex items-center gap-4 pb-4 border-b border-gray-200">
+                                                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-black text-2xl">
+                                                    ${user.name.charAt(0).toUpperCase()}
+                                                </div>
+                                                <div>
+                                                    <h3 class="text-2xl font-black text-gray-900">${user.name}</h3>
+                                                    <p class="text-sm text-blue-600 font-semibold">${user.email}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="grid grid-cols-2 gap-4">
+                                                <div class="bg-blue-50 p-4 rounded-lg">
+                                                    <p class="text-xs text-gray-500 font-semibold uppercase tracking-wide">Phone</p>
+                                                    <p class="text-lg font-black text-gray-900">${user.phone}</p>
+                                                </div>
+                                                <div class="bg-green-50 p-4 rounded-lg">
+                                                    <p class="text-xs text-gray-500 font-semibold uppercase tracking-wide">Department</p>
+                                                    <p class="text-lg font-black text-gray-900">${user.department}</p>
+                                                </div>
+                                                <div class="bg-purple-50 p-4 rounded-lg">
+                                                    <p class="text-xs text-gray-500 font-semibold uppercase tracking-wide">Year</p>
+                                                    <p class="text-lg font-black text-gray-900">${user.year}</p>
+                                                </div>
+                                                <div class="bg-orange-50 p-4 rounded-lg">
+                                                    <p class="text-xs text-gray-500 font-semibold uppercase tracking-wide">Semester</p>
+                                                    <p class="text-lg font-black text-gray-900">${user.semester}</p>
+                                                </div>
+                                                <div class="bg-indigo-50 p-4 rounded-lg">
+                                                    <p class="text-xs text-gray-500 font-semibold uppercase tracking-wide">Student ID</p>
+                                                    <p class="text-lg font-black text-gray-900">${user.student_id}</p>
+                                                </div>
+                                                <div class="bg-pink-50 p-4 rounded-lg">
+                                                    <p class="text-xs text-gray-500 font-semibold uppercase tracking-wide">Batch</p>
+                                                    <p class="text-lg font-black text-gray-900">${user.batch}</p>
+                                                </div>
+                                                <div class="bg-teal-50 p-4 rounded-lg">
+                                                    <p class="text-xs text-gray-500 font-semibold uppercase tracking-wide">Gender</p>
+                                                    <p class="text-lg font-black text-gray-900">${user.gender}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="border-t border-gray-200 pt-4">
+                                                <div class="grid grid-cols-2 gap-4">
+                                                    <div class="bg-gradient-to-br from-blue-100 to-blue-50 p-4 rounded-lg text-center">
+                                                        <p class="text-xs text-gray-500 font-semibold uppercase">Products Posted</p>
+                                                        <p class="text-3xl font-black text-blue-700">${user.products_posted}</p>
+                                                    </div>
+                                                    <div class="bg-gradient-to-br from-green-100 to-green-50 p-4 rounded-lg text-center">
+                                                        <p class="text-xs text-gray-500 font-semibold uppercase">Products Sold</p>
+                                                        <p class="text-3xl font-black text-green-700">${user.products_sold}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `;
+                                } else {
+                                    content.innerHTML = '<p class="text-red-600 font-bold">Failed to load user profile</p>';
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                content.innerHTML = '<p class="text-red-600 font-bold">Error loading profile</p>';
+                            });
+                    }
+
+                    function closeUserProfile() {
+                        document.getElementById('userProfileModal').classList.add('hidden');
+                    }
+
+                    // Close modal when clicking outside
+                    document.getElementById('userProfileModal').addEventListener('click', function(e) {
+                        if (e.target === this) {
+                            closeUserProfile();
+                        }
+                    });
                 </script>
 
                 <!-- Pagination -->
@@ -402,6 +494,23 @@
                     </div>
                 @endif
             @endif
+        </div>
+    </div>
+
+    <!-- User Profile Modal -->
+    <div id="userProfileModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 p-6 flex items-center justify-between rounded-t-3xl">
+                <h2 class="text-2xl font-black text-white">👤 User Profile</h2>
+                <button onclick="closeUserProfile()" class="text-white hover:bg-blue-800 w-10 h-10 rounded-full flex items-center justify-center transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="userProfileContent" class="p-8">
+                <div class="flex justify-center items-center h-32">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                </div>
+            </div>
         </div>
     </div>
 </x-app-layout>

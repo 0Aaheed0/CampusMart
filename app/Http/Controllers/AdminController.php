@@ -8,6 +8,14 @@ use App\Models\PostProduct;
 
 class AdminController extends Controller
 {
+    // Admin emails with @aust.edu domain for AUST students
+    const ADMIN_EMAILS = [
+        'yousha.cse.20230104097@aust.edu',
+        'aaheed.cse.20230104094@aust.edu',
+        'miraz.cse.20230104092@aust.edu',
+        'noman.cse.20230104088@aust.edu'
+    ];
+
     /**
      * Display the admin dashboard.
      *
