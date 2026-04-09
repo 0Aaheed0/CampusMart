@@ -237,7 +237,7 @@
                             <!-- Image Container -->
                             <div class="product-image-container">
                                 @if($product->product_image)
-                                    <img src="{{ asset('storage/' . $product->product_image) }}" alt="{{ $product->product_name }}" class="product-image">
+                                    <img src="{{ str_starts_with($product->product_image, 'http') ? $product->product_image : asset('storage/' . $product->product_image) }}" alt="{{ $product->product_name }}" class="product-image">
                                 @else
                                     <div class="placeholder-image">
                                         <svg class="h-16 w-16 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">

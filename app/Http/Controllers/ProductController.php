@@ -72,6 +72,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'contact_number' => 'required|string|max:20',
             'product_image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
+            'product_image_url' => 'nullable|url',
         ]);
 
         $data = $request->only([
@@ -86,9 +87,12 @@ class ProductController extends Controller
 
         $data['user_id'] = Auth::id();
 
+        // Handle image: either file upload or URL
         if ($request->hasFile('product_image')) {
             $path = $request->file('product_image')->store('products', 'public');
             $data['product_image'] = $path;
+        } elseif ($request->filled('product_image_url')) {
+            $data['product_image'] = $request->product_image_url;
         }
 
         PostProduct::create($data);

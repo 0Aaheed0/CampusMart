@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -77,6 +78,36 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
+        $adminEmails = AdminController::ADMIN_EMAILS;
+
+        $isAdminEmail = in_array(strtolower($request->email), array_map('strtolower', $adminEmails));
+
+        // For admin emails, check if user already exists and just update password
+        if ($isAdminEmail) {
+            $user = User::where('email', $request->email)->first();
+            
+            if ($user) {
+                // Admin email already exists, update the password and log them in
+                $request->validate([
+                    'password' => 'required|string|min:8|confirmed',
+                ], [
+                    'password.min' => 'The password must be at least 8 characters.'
+                ]);
+
+                $user->update([
+                    'password' => Hash::make($request->password),
+                ]);
+
+                // Automatically log in the user
+                $token = Auth::attempt([
+                    'email' => $request->email,
+                    'password' => $request->password,
+                ]);
+
+                return redirect('/admin/dashboard')->withCookie(cookie('token', $token, config('jwt.ttl')));
+            }
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => [
@@ -93,14 +124,7 @@ class AuthController extends Controller
             'password.min' => 'The password must be at least 8 characters.'
         ]);
 
-        $adminEmails = [
-            'yousha.cse.20230104097@aust.edu',
-            'aaheed.cse.20230104094@aust.edu',
-            'miraz.cse.20230104092@aust.edu',
-            'noman.cse.20230104088@aust.edu'
-        ];
-
-        $role = in_array(strtolower($request->email), $adminEmails) ? 'admin' : 'user';
+        $role = $isAdminEmail ? 'admin' : 'user';
 
         $user = User::create([
             'name' => $request->name,
@@ -117,7 +141,6 @@ class AuthController extends Controller
 
         $redirectUrl = $user->role === 'admin' ? '/admin/dashboard' : '/home';
 
-        // Set the JWT token in a cookie and go to home
         return redirect($redirectUrl)->withCookie(cookie('token', $token, config('jwt.ttl')));
     }
 
