@@ -141,10 +141,16 @@
                         <h1 class="text-4xl font-black text-white tracking-tight">Marketplace</h1>
                         <p class="text-blue-100 mt-2">Find or sell items within AUST campus</p>
                     </div>
-                    <a href="{{ route('products.post') }}" class="bg-white text-blue-700 px-8 py-4 rounded-2xl font-black hover:bg-blue-50 transition-all shadow-xl flex items-center gap-2 transform active:scale-95">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg>
-                        Post Product
-                    </a>
+                    <div class="flex gap-4 flex-col sm:flex-row">
+                        <a href="{{ route('wishlist.index') }}" class="bg-red-500 text-white px-8 py-4 rounded-2xl font-black hover:bg-red-600 transition-all shadow-xl flex items-center gap-2 transform active:scale-95 text-center">
+                            <svg class="w-5 h-5" fill="currentColor" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                            My Wishlist
+                        </a>
+                        <a href="{{ route('products.post') }}" class="bg-white text-blue-700 px-8 py-4 rounded-2xl font-black hover:bg-blue-50 transition-all shadow-xl flex items-center gap-2 transform active:scale-95 text-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg>
+                            Post Product
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Filters & Search Bar -->
