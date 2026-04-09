@@ -95,4 +95,10 @@ class ProductController extends Controller
 
         return redirect()->route('products.available')->with('success', 'Product posted successfully!');
     }
+
+    public function payment($id)
+    {
+        $product = PostProduct::findOrFail($id);
+        return view('products.payment', compact('product'));
+    }
 }
