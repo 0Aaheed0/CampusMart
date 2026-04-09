@@ -1,351 +1,312 @@
 <x-app-layout>
-    @section('styles')
     <style>
-        /* Admin Dashboard Theme Styling */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        .dashboard-container {
+        .dashboard-bg {
+            background: #0f172a;
             min-h-screen;
-            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
-            padding: 40px 0;
             position: relative;
             overflow: hidden;
         }
 
-        /* Design elements matching CampusMart style */
-        .header-section {
-            margin-bottom: 40px;
+        /* Background Effects */
+        .dashboard-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.2;
+            transform: translate(150px, -150px);
+        }
+
+        .dashboard-bg::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, #4c1d95, #6366f1);
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.2;
+            transform: translate(-150px, 150px);
+        }
+
+        .glass-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 32px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .header-content h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
             color: white;
-        }
-
-        .header-section h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            letter-spacing: -0.025em;
             margin-bottom: 8px;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
-        .header-section p {
+        .header-content p {
             font-size: 1.125rem;
             color: #bfdbfe;
+            font-weight: 500;
         }
 
-        /* Statistics Cards Styling */
+        .logout-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 14px;
+            border: none;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(1, minmax(0, 1fr));
-            gap: 24px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
         }
 
         @media (min-width: 640px) {
-            .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (min-width: 1024px) {
-            .stats-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .stats-grid { grid-template-columns: repeat(4, 1fr); }
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
             padding: 24px;
             color: white;
             transition: all 0.3s ease;
         }
 
         .stat-card:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.1);
         }
 
         .stat-label {
             font-size: 0.875rem;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 4px;
+            letter-spacing: 0.08em;
+            color: #93c5fd;
+            margin-bottom: 8px;
             display: block;
         }
 
         .stat-number {
-            font-size: 2.25rem;
-            font-weight: 800;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #ffffff;
         }
 
-        /* Admin Controls Navigation Styling */
-        .controls-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 12px;
-            padding: 32px;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-        }
-
+        /* Controls Title */
         .controls-title {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: #1f2937;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: white;
             margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
+        .section-badge {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            color: #93c5fd;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Nav Grid */
         .nav-grid {
             display: grid;
-            grid-template-columns: repeat(1, minmax(0, 1fr));
+            grid-template-columns: repeat(1, 1fr);
             gap: 16px;
         }
 
         @media (min-width: 640px) {
-            .nav-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .nav-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (min-width: 1024px) {
-            .nav-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .nav-grid { grid-template-columns: repeat(4, 1fr); }
         }
 
         .nav-button {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            padding: 16px;
-            border-radius: 12px;
-            font-weight: 700;
+            gap: 12px;
+            padding: 24px 20px;
+            border-radius: 16px;
+            font-weight: 800;
             color: white;
             text-decoration: none;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 18px;
+        }
+
+        .nav-button span {
+            font-size: 2.5rem;
+            display: block;
         }
 
         .nav-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            filter: brightness(110%);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
-        .btn-blue { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
-        .btn-green { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-        .btn-orange { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
-
-        /* Product Listings Table Styling */
-        .listings-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 12px;
-            padding: 32px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        .btn-blue {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2));
+            color: #93c5fd;
         }
 
-        .listings-title {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: #1f2937;
-            margin-bottom: 24px;
+        .btn-blue:hover {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(37, 99, 235, 0.3));
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.2);
         }
 
-        .table-responsive {
-            overflow-x: auto;
+        .btn-green {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
+            color: #6ee7b7;
         }
 
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
+        .btn-green:hover {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(5, 150, 105, 0.3));
+            box-shadow: 0 12px 40px rgba(16, 185, 129, 0.2);
         }
 
-        .admin-table th {
-            padding: 12px 16px;
-            background: #f9fafb;
-            color: #6b7280;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border-bottom: 1px solid #e5e7eb;
+        .btn-orange {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2));
+            color: #fcd34d;
         }
 
-        .admin-table td {
-            padding: 16px;
-            color: #1f2937;
-            font-size: 0.875rem;
-            border-bottom: 1px solid #f3f4f6;
-            transition: background 0.3s ease;
-        }
-
-        .admin-table tr:hover td {
-            background: #f9fafb;
-        }
-
-        .badge {
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-
-        .badge-available { background-color: #d1fae5; color: #065f46; }
-        .badge-sold { background-color: #fee2e2; color: #7f1d1d; }
-
-        .btn-delete {
-            color: #ef4444;
-            font-weight: 700;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .btn-delete:hover {
-            color: #dc2626;
+        .btn-orange:hover {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(217, 119, 6, 0.3));
+            box-shadow: 0 12px 40px rgba(245, 158, 11, 0.2);
         }
     </style>
-    @endsection
 
-    @section('content')
-    <div class="dashboard-container">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <!-- 1. Header Section -->
-            <div class="header-section">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <h1>Admin Dashboard</h1>
-                        <p>Manage users, products, and platform analytics</p>
-                    </div>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" style="background: #ef4444; color: white; padding: 12px 24px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; transition: all 0.3s ease;">
-                            🚪 Logout
-                        </button>
-                    </form>
+    <div class="dashboard-bg py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="header-container glass-container mb-8">
+                <div class="header-content">
+                    <h1>🎛️ Admin Dashboard</h1>
+                    <p>Control and manage your CampusMart platform</p>
                 </div>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="logout-btn">
+                        🚪 Logout
+                    </button>
+                </form>
             </div>
 
-            <!-- 2. Statistics Cards -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-label">Total Users</span>
+            <!-- Statistics -->
+            <div class="stats-grid mb-8">
+                <div class="stat-card glass-container">
+                    <span class="stat-label">👥 Total Users</span>
                     <div class="stat-number">5</div>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-label">Total Products</span>
+                <div class="stat-card glass-container">
+                    <span class="stat-label">📦 Total Products</span>
                     <div class="stat-number">15</div>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-label">Available Items</span>
+                <div class="stat-card glass-container">
+                    <span class="stat-label">✅ Available Items</span>
                     <div class="stat-number">15</div>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-label">Sold Items</span>
+                <div class="stat-card glass-container">
+                    <span class="stat-label">🎁 Sold Items</span>
                     <div class="stat-number">0</div>
                 </div>
             </div>
 
-            <!-- 3. Navigation Section -->
-            <div class="controls-card">
-                <h2 class="controls-title">Admin Controls</h2>
+            <!-- Admin Controls -->
+            <div class="glass-container mb-8">
+                <div class="section-badge">⚙️ ADMIN CONTROLS</div>
+                <h2 class="controls-title">Management Tools</h2>
                 <div class="nav-grid">
                     <a href="{{ route('admin.products') }}" class="nav-button btn-blue">
-                        <span>📦</span> Products
-                    </a>
-                    <a href="{{ route('admin.posts') }}" class="nav-button btn-blue">
-                        <span>📝</span> Posts
+                        <span>📦</span>
+                        Products
                     </a>
                     <a href="{{ route('admin.reports') }}" class="nav-button btn-blue">
-                        <span>📋</span> Reports
+                        <span>📋</span>
+                        Reports
                     </a>
                     <a href="{{ route('admin.faq') }}" class="nav-button btn-green">
-                        <span>❓</span> FAQ
+                        <span>❓</span>
+                        FAQ
                     </a>
                     <a href="{{ route('admin.users') }}" class="nav-button btn-green">
-                        <span>👥</span> Users
+                        <span>👥</span>
+                        Users
                     </a>
                     <a href="{{ route('admin.reviews') }}" class="nav-button btn-orange">
-                        <span>⭐</span> Reviews
+                        <span>⭐</span>
+                        Reviews
                     </a>
                     <a href="{{ route('admin.history') }}" class="nav-button btn-orange">
-                        <span>📜</span> History
+                        <span>📜</span>
+                        History
                     </a>
                 </div>
             </div>
 
-            <!-- 4. Product Listings Section -->
-            <div class="listings-card">
-                <h2 class="listings-title">Recent Product Listings</h2>
-                <div class="table-responsive">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>Product Name</th>
-                                <th>Category</th>
-                                <th>Price</th>
-                                <th>Condition</th>
-                                <th>Poster</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Sample Row 1 -->
-                            <tr>
-                                <td class="font-bold">Math note</td>
-                                <td>Books</td>
-                                <td>৳1,000</td>
-                                <td>Used-Excellent</td>
-                                <td>Yousha Shahid</td>
-                                <td><span class="badge badge-available">Available</span></td>
-                                <td><a href="#" class="btn-delete">Delete</a></td>
-                            </tr>
-                            <!-- Sample Row 2 -->
-                            <tr>
-                                <td class="font-bold">Casio Scientific Calculator</td>
-                                <td>Electronics</td>
-                                <td>৳1,200</td>
-                                <td>Used-Excellent</td>
-                                <td>Yasir Ahmed</td>
-                                <td><span class="badge badge-available">Available</span></td>
-                                <td><a href="#" class="btn-delete">Delete</a></td>
-                            </tr>
-                            <!-- Sample Row 3 -->
-                            <tr>
-                                <td class="font-bold">Data Structures & Algorithms Book</td>
-                                <td>Books</td>
-                                <td>৳350</td>
-                                <td>Used-Good</td>
-                                <td>Nadia Islam</td>
-                                <td><span class="badge badge-available">Available</span></td>
-                                <td><a href="#" class="btn-delete">Delete</a></td>
-                            </tr>
-                            <!-- Sample Row 4 -->
-                            <tr>
-                                <td class="font-bold">HP 15s Laptop</td>
-                                <td>Electronics</td>
-                                <td>৳45,000</td>
-                                <td>Used-Good</td>
-                                <td>Ahmed Khan</td>
-                                <td><span class="badge badge-available">Available</span></td>
-                                <td><a href="#" class="btn-delete">Delete</a></td>
-                            </tr>
-                            <!-- Sample Row 5 -->
-                            <tr>
-                                <td class="font-bold">Ergonomic Mesh Office Chair</td>
-                                <td>Furniture</td>
-                                <td>৳3,500</td>
-                                <td>Used-Good</td>
-                                <td>Raisa Rana</td>
-                                <td><span class="badge badge-available">Available</span></td>
-                                <td><a href="#" class="btn-delete">Delete</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <!-- Footer note -->
+            <div class="glass-container text-center">
+                <p class="text-blue-300 text-sm">
+                    💡 Use the management tools above to control all aspects of your CampusMart platform
+                </p>
             </div>
-
         </div>
     </div>
-    @endsection
-
-    {{-- Render styles and content because layout uses $slot but prompt asked for @section --}}
-    @yield('styles')
-    @yield('content')
 </x-app-layout>

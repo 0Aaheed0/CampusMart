@@ -79,4 +79,62 @@ class AdminController extends Controller
 
         return view('admin.history', compact('payments'));
     }
+
+    /**
+     * Display all reviews submitted by users.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function reviews()
+    {
+        $reviews = \App\Models\Review::with(['user', 'product'])
+            ->orderByDesc('created_at')
+            ->paginate(20);
+
+        $totalReviews = \App\Models\Review::count();
+        $averageRating = \App\Models\Review::avg('rating') ?? 0;
+        $fiveStarCount = \App\Models\Review::where('rating', 5)->count();
+        $todayReviews = \App\Models\Review::whereDate('created_at', today())->count();
+
+        return view('admin.reviews', compact('reviews', 'totalReviews', 'averageRating', 'fiveStarCount', 'todayReviews'));
+    }
+
+    /**
+     * Display all reports for admin review
+     *
+     * @return \Illuminate\View\View
+     */
+    public function reports()
+    {
+        $reports = \App\Models\Report::with(['user', 'product', 'reportedUser', 'admin'])
+            ->orderByDesc('created_at')
+            ->paginate(15);
+
+        $totalReports = \App\Models\Report::count();
+        $pendingReports = \App\Models\Report::where('status', 'pending')->count();
+        $resolvedReports = \App\Models\Report::where('status', 'resolved')->count();
+        $todayReports = \App\Models\Report::whereDate('created_at', today())->count();
+
+        return view('admin.reports', compact('reports', 'totalReports', 'pendingReports', 'resolvedReports', 'todayReports'));
+    }
+
+    /**
+     * Update report status
+     */
+    public function updateReportStatus(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:pending,reviewed,resolved,dismissed',
+            'admin_notes' => 'nullable|string|max:2000',
+        ]);
+
+        $report = \App\Models\Report::findOrFail($id);
+        $report->update([
+            'status' => $validated['status'],
+            'admin_notes' => $validated['admin_notes'] ?? $report->admin_notes,
+            'admin_id' => Auth::id(),
+        ]);
+
+        return back()->with('success', 'Report status updated successfully.');
+    }
 }

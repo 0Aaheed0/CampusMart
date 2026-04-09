@@ -43,6 +43,7 @@ Route::middleware(['auth', 'prevent-back'])->group(function () {
     Route::post('/post-product', [\App\Http\Controllers\ProductController::class, 'store'])->name('products.store');
     Route::get('/payment/{id}', [\App\Http\Controllers\ProductController::class, 'payment'])->name('products.payment');
     Route::get('/reviews', [\App\Http\Controllers\ReviewController::class, 'index'])->name('reviews.index');
+    Route::post('/reviews', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
     Route::get('/report-issues', function() { return view('home'); })->name('issues.report');
     Route::get('/help-board', [\App\Http\Controllers\HelpBoardController::class, 'index'])->name('help.board');
 
@@ -65,6 +66,11 @@ Route::middleware(['auth', 'prevent-back'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // Report Routes
+    Route::get('/reports/create', [\App\Http\Controllers\ReportController::class, 'create'])->name('reports.create');
+    Route::post('/reports', [\App\Http\Controllers\ReportController::class, 'store'])->name('reports.store');
+    Route::get('/reports', [\App\Http\Controllers\ReportController::class, 'myReports'])->name('reports.my-reports');
+
 });
 
 /*
@@ -81,8 +87,14 @@ Route::middleware(['auth', 'prevent-back', 'admin'])->prefix('admin')->name('adm
     Route::get('/users', function() { return "Manage Users Page"; })->name('users');
     Route::get('/products', function() { return "Manage Products Page"; })->name('products');
     Route::get('/posts', function() { return "Manage Posts Page"; })->name('posts');
-    Route::get('/reports', function() { return "Manage Reports Page"; })->name('reports');
-    Route::get('/faq', function() { return "Manage FAQ Page"; })->name('faq');
-    Route::get('/reviews', function() { return "Manage Reviews Page"; })->name('reviews');
+    Route::get('/reports', [\App\Http\Controllers\AdminController::class, 'reports'])->name('reports');
+    Route::patch('/reports/{id}', [\App\Http\Controllers\AdminController::class, 'updateReportStatus'])->name('reports.update');
+    Route::get('/faq', [\App\Http\Controllers\HelpBoardController::class, 'adminIndex'])->name('faq');
+    Route::get('/faq/create', [\App\Http\Controllers\HelpBoardController::class, 'adminCreate'])->name('faq.create');
+    Route::post('/faq', [\App\Http\Controllers\HelpBoardController::class, 'adminStore'])->name('faq.store');
+    Route::get('/faq/{faq}/edit', [\App\Http\Controllers\HelpBoardController::class, 'adminEdit'])->name('faq.edit');
+    Route::patch('/faq/{faq}', [\App\Http\Controllers\HelpBoardController::class, 'adminUpdate'])->name('faq.update');
+    Route::delete('/faq/{faq}', [\App\Http\Controllers\HelpBoardController::class, 'adminDestroy'])->name('faq.destroy');
+    Route::get('/reviews', [\App\Http\Controllers\AdminController::class, 'reviews'])->name('reviews');
     Route::get('/history', [\App\Http\Controllers\AdminController::class, 'history'])->name('history');
 });
