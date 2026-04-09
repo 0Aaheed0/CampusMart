@@ -1,29 +1,64 @@
 # Git
 .git
 .gitignore
+.gitattributes
 
-# Node
+# Version Control
+.github
+.gitlab
+
+# Node & Frontend
 node_modules
 npm-debug.log
+npm-error.log
 yarn-error.log
+yarn.lock
+package-lock.json
+webpack.mix.js
 
-# Laravel
+# Laravel - Build Artifacts
 vendor
-storage/logs
-storage/framework/cache
-storage/framework/sessions
-storage/framework/views
+bootstrap/cache/*
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/framework/testing/*
 
-# Environment
+# Environment Variables
 .env
 .env.*
+!.env.example
 
-# Docker
-docker-compose.yml
-.dockerignore
-
-# IDE / OS
+# IDE / Editor
 .vscode
 .idea
+.sublime-project
+.sublime-workspace
+*.swp
+*.swo
+*~
 .DS_Store
 Thumbs.db
+.phpstorm.meta.php
+.php_cs.cache
+
+# Docker
+docker-compose.yml.override
+.dockerignore
+Dockerfile.dev
+
+# Testing
+phpunit.xml
+.phpunit.result.cache
+coverage/
+
+# Development
+debug.log
+*.bak
+*.tmp
+
+# OS Specific
+.vagrant
+.env.local
+.env.*.local

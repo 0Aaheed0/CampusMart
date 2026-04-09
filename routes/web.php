@@ -54,6 +54,9 @@ Route::middleware(['auth', 'prevent-back'])->group(function () {
     Route::post('/wishlist/checkout', [\App\Http\Controllers\WishlistController::class, 'checkout'])->name('wishlist.checkout');
     Route::get('/wishlist/check/{product_id}', [\App\Http\Controllers\WishlistController::class, 'isInWishlist'])->name('wishlist.check');
 
+    // User Profile Popup
+    Route::get('/user/{id}/popup', [\App\Http\Controllers\UsersController::class, 'popup'])->name('user.popup');
+
     // Payment Routes
     Route::post('/payment/checkout', [\App\Http\Controllers\PaymentController::class, 'checkout'])->name('payment.checkout');
     Route::post('/payment/process', [\App\Http\Controllers\PaymentController::class, 'process'])->name('payment.process');
