@@ -207,8 +207,18 @@
             
             <!-- 1. Header Section -->
             <div class="header-section">
-                <h1>Admin Dashboard</h1>
-                <p>Manage users, products, and platform analytics</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h1>Admin Dashboard</h1>
+                        <p>Manage users, products, and platform analytics</p>
+                    </div>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" style="background: #ef4444; color: white; padding: 12px 24px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; transition: all 0.3s ease;">
+                            🚪 Logout
+                        </button>
+                    </form>
+                </div>
             </div>
 
             <!-- 2. Statistics Cards -->
@@ -235,23 +245,26 @@
             <div class="controls-card">
                 <h2 class="controls-title">Admin Controls</h2>
                 <div class="nav-grid">
-                    <a href="{{ route('admin.users') }}" class="nav-button btn-blue">
-                        <span>👥</span> Manage Users
-                    </a>
                     <a href="{{ route('admin.products') }}" class="nav-button btn-blue">
-                        <span>📦</span> Manage Products
+                        <span>📦</span> Products
                     </a>
-                    <a href="{{ route('admin.analytics') }}" class="nav-button btn-green">
-                        <span>📊</span> Analytics
+                    <a href="{{ route('admin.posts') }}" class="nav-button btn-blue">
+                        <span>📝</span> Posts
                     </a>
-                    <a href="{{ route('admin.categories') }}" class="nav-button btn-green">
-                        <span>🏷️</span> Categories
-                    </a>
-                    <a href="{{ route('admin.reports') }}" class="nav-button btn-orange">
+                    <a href="{{ route('admin.reports') }}" class="nav-button btn-blue">
                         <span>📋</span> Reports
                     </a>
-                    <a href="{{ route('admin.settings') }}" class="nav-button btn-orange">
-                        <span>⚙️</span> Settings
+                    <a href="{{ route('admin.faq') }}" class="nav-button btn-green">
+                        <span>❓</span> FAQ
+                    </a>
+                    <a href="{{ route('admin.users') }}" class="nav-button btn-green">
+                        <span>👥</span> Users
+                    </a>
+                    <a href="{{ route('admin.reviews') }}" class="nav-button btn-orange">
+                        <span>⭐</span> Reviews
+                    </a>
+                    <a href="{{ route('admin.history') }}" class="nav-button btn-orange">
+                        <span>📜</span> History
                     </a>
                 </div>
             </div>
