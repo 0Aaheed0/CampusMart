@@ -61,4 +61,12 @@ Route::middleware(['auth', 'prevent-back', 'admin'])->prefix('admin')->name('adm
     Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
     Route::delete('/users/{id}', [\App\Http\Controllers\AdminController::class, 'deleteUser'])->name('users.delete');
     Route::delete('/products/{id}', [\App\Http\Controllers\AdminController::class, 'deleteProduct'])->name('products.delete');
+    
+    // Additional admin routes requested for the dashboard navigation
+    Route::get('/users', function() { return "Manage Users Page"; })->name('users');
+    Route::get('/products', function() { return "Manage Products Page"; })->name('products');
+    Route::get('/analytics', function() { return "Analytics Page"; })->name('analytics');
+    Route::get('/categories', function() { return "Categories Page"; })->name('categories');
+    Route::get('/reports', function() { return "Reports Page"; })->name('reports');
+    Route::get('/settings', function() { return "Settings Page"; })->name('settings');
 });

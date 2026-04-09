@@ -1,252 +1,338 @@
 <x-app-layout>
+    @section('styles')
     <style>
-        .page-bg {
-            background: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
+        /* Admin Dashboard Theme Styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
-        .blob {
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: #3b82f6;
-            filter: blur(140px);
-            opacity: 0.15;
-            border-radius: 50%;
-            animation: move 20s infinite alternate;
+        .dashboard-container {
+            min-h-screen;
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            padding: 40px 0;
+            position: relative;
+            overflow: hidden;
         }
 
-        .blob2 { right: -150px; bottom: -150px; background: #22c55e; }
-        .blob3 { left: -150px; top: -150px; background: #60a5fa; }
+        /* Design elements matching CampusMart style */
+        .header-section {
+            margin-bottom: 40px;
+            color: white;
+        }
 
-        @keyframes move {
-            from { transform: translate(0, 0) }
-            to { transform: translate(80px, 60px) }
+        .header-section h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            margin-bottom: 8px;
+        }
+
+        .header-section p {
+            font-size: 1.125rem;
+            color: #bfdbfe;
+        }
+
+        /* Statistics Cards Styling */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        @media (min-width: 640px) {
+            .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (min-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
         }
 
         .stat-card {
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
+            border-radius: 12px;
             padding: 24px;
+            color: white;
             transition: all 0.3s ease;
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
             background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
         }
 
-        .admin-table-container {
-            background: white;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .admin-table thead {
-            background: #f8fafc;
-        }
-
-        .admin-table th {
-            font-size: 12px;
+        .stat-label {
+            font-size: 0.875rem;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            font-weight: 700;
-            color: #64748b;
-            padding: 16px 24px;
-            text-align: left;
+            margin-bottom: 4px;
+            display: block;
         }
 
-        .admin-table td {
-            padding: 16px 24px;
-            font-size: 14px;
-            color: #334155;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .status-badge {
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .status-available { background: #dcfce7; color: #166534; }
-        .status-sold { background: #fee2e2; color: #991b1b; }
-        .status-pending { background: #fef9c3; color: #854d0e; }
-
-        .role-badge {
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 10px;
+        .stat-number {
+            font-size: 2.25rem;
             font-weight: 800;
         }
 
-        .role-admin { background: #1e3a8a; color: white; }
-        .role-user { background: #e2e8f0; color: #475569; }
+        /* Admin Controls Navigation Styling */
+        .controls-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .controls-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 24px;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        @media (min-width: 640px) {
+            .nav-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (min-width: 1024px) {
+            .nav-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+
+        .nav-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            filter: brightness(110%);
+        }
+
+        .btn-blue { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+        .btn-green { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .btn-orange { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+
+        /* Product Listings Table Styling */
+        .listings-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .listings-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 24px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .admin-table th {
+            padding: 12px 16px;
+            background: #f9fafb;
+            color: #6b7280;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .admin-table td {
+            padding: 16px;
+            color: #1f2937;
+            font-size: 0.875rem;
+            border-bottom: 1px solid #f3f4f6;
+            transition: background 0.3s ease;
+        }
+
+        .admin-table tr:hover td {
+            background: #f9fafb;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .badge-available { background-color: #d1fae5; color: #065f46; }
+        .badge-sold { background-color: #fee2e2; color: #7f1d1d; }
+
+        .btn-delete {
+            color: #ef4444;
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .btn-delete:hover {
+            color: #dc2626;
+        }
     </style>
+    @endsection
 
-    <div class="py-12 page-bg min-h-screen relative overflow-hidden">
-        <!-- Background Blobs -->
-        <div class="blob blob3"></div>
-        <div class="blob"></div>
-        <div class="blob blob2"></div>
+    @section('content')
+    <div class="dashboard-container">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- 1. Header Section -->
+            <div class="header-section">
+                <h1>Admin Dashboard</h1>
+                <p>Manage users, products, and platform analytics</p>
+            </div>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <!-- Header -->
-            <div class="mb-10 flex justify-between items-center">
-                <div>
-                    <h1 class="text-4xl font-black text-white tracking-tight">Admin Dashboard</h1>
-                    <p class="text-blue-100 mt-2">Manage users and products for CampusMart</p>
+            <!-- 2. Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Total Users</span>
+                    <div class="stat-number">5</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Total Products</span>
+                    <div class="stat-number">15</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Available Items</span>
+                    <div class="stat-number">15</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Sold Items</span>
+                    <div class="stat-number">0</div>
                 </div>
             </div>
 
-            <!-- Messages -->
-            @if(session('success'))
-                <div class="bg-green-500 text-white p-4 mb-8 rounded-2xl shadow-xl flex items-center gap-3">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span class="font-bold">{{ session('success') }}</span>
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="bg-red-500 text-white p-4 mb-8 rounded-2xl shadow-xl flex items-center gap-3">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span class="font-bold">{{ session('error') }}</span>
-                </div>
-            @endif
-
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                <div class="stat-card">
-                    <p class="text-blue-200 font-bold text-xs uppercase tracking-widest mb-1">Total Users</p>
-                    <h2 class="text-4xl font-black text-white">{{ $totalUsers }}</h2>
-                </div>
-                <div class="stat-card">
-                    <p class="text-blue-200 font-bold text-xs uppercase tracking-widest mb-1">Total Products</p>
-                    <h2 class="text-4xl font-black text-white">{{ $totalProducts }}</h2>
-                </div>
-                <div class="stat-card">
-                    <p class="text-green-300 font-bold text-xs uppercase tracking-widest mb-1">Available</p>
-                    <h2 class="text-4xl font-black text-white">{{ $availableProducts }}</h2>
-                </div>
-                <div class="stat-card">
-                    <p class="text-red-300 font-bold text-xs uppercase tracking-widest mb-1">Sold Items</p>
-                    <h2 class="text-4xl font-black text-white">{{ $soldProducts }}</h2>
+            <!-- 3. Navigation Section -->
+            <div class="controls-card">
+                <h2 class="controls-title">Admin Controls</h2>
+                <div class="nav-grid">
+                    <a href="{{ route('admin.users') }}" class="nav-button btn-blue">
+                        <span>👥</span> Manage Users
+                    </a>
+                    <a href="{{ route('admin.products') }}" class="nav-button btn-blue">
+                        <span>📦</span> Manage Products
+                    </a>
+                    <a href="{{ route('admin.analytics') }}" class="nav-button btn-green">
+                        <span>📊</span> Analytics
+                    </a>
+                    <a href="{{ route('admin.categories') }}" class="nav-button btn-green">
+                        <span>🏷️</span> Categories
+                    </a>
+                    <a href="{{ route('admin.reports') }}" class="nav-button btn-orange">
+                        <span>📋</span> Reports
+                    </a>
+                    <a href="{{ route('admin.settings') }}" class="nav-button btn-orange">
+                        <span>⚙️</span> Settings
+                    </a>
                 </div>
             </div>
 
-            <!-- Products Table -->
-            <div class="mb-12">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-black text-white">All Product Listings</h2>
-                </div>
-                <div class="admin-table-container">
-                    <div class="overflow-x-auto">
-                        <table class="admin-table w-full">
-                            <thead>
-                                <tr>
-                                    <th>Product Name</th>
-                                    <th>Category</th>
-                                    <th>Price</th>
-                                    <th>Condition</th>
-                                    <th>Poster</th>
-                                    <th>Posted Date</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($products as $product)
-                                    <tr>
-                                        <td class="font-bold">{{ $product->product_name }}</td>
-                                        <td>{{ $product->product_type }}</td>
-                                        <td class="font-bold text-blue-600">৳{{ number_format($product->price) }}</td>
-                                        <td>{{ $product->condition }}</td>
-                                        <td>
-                                            <div class="flex flex-col">
-                                                <span class="font-semibold">{{ $product->user->name ?? 'Anonymous' }}</span>
-                                                <span class="text-xs text-gray-500">{{ $product->contact_number }}</span>
-                                            </div>
-                                        </td>
-                                        <td class="text-gray-500">{{ $product->created_at->format('M d, Y') }}</td>
-                                        <td>
-                                            <span class="status-badge status-{{ $product->status }}">
-                                                {{ $product->status }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <form action="{{ route('admin.products.delete', $product->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="text-red-500 hover:text-red-700 font-bold transition-colors">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+            <!-- 4. Product Listings Section -->
+            <div class="listings-card">
+                <h2 class="listings-title">Recent Product Listings</h2>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Condition</th>
+                                <th>Poster</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Sample Row 1 -->
+                            <tr>
+                                <td class="font-bold">Math note</td>
+                                <td>Books</td>
+                                <td>৳1,000</td>
+                                <td>Used-Excellent</td>
+                                <td>Yousha Shahid</td>
+                                <td><span class="badge badge-available">Available</span></td>
+                                <td><a href="#" class="btn-delete">Delete</a></td>
+                            </tr>
+                            <!-- Sample Row 2 -->
+                            <tr>
+                                <td class="font-bold">Casio Scientific Calculator</td>
+                                <td>Electronics</td>
+                                <td>৳1,200</td>
+                                <td>Used-Excellent</td>
+                                <td>Yasir Ahmed</td>
+                                <td><span class="badge badge-available">Available</span></td>
+                                <td><a href="#" class="btn-delete">Delete</a></td>
+                            </tr>
+                            <!-- Sample Row 3 -->
+                            <tr>
+                                <td class="font-bold">Data Structures & Algorithms Book</td>
+                                <td>Books</td>
+                                <td>৳350</td>
+                                <td>Used-Good</td>
+                                <td>Nadia Islam</td>
+                                <td><span class="badge badge-available">Available</span></td>
+                                <td><a href="#" class="btn-delete">Delete</a></td>
+                            </tr>
+                            <!-- Sample Row 4 -->
+                            <tr>
+                                <td class="font-bold">HP 15s Laptop</td>
+                                <td>Electronics</td>
+                                <td>৳45,000</td>
+                                <td>Used-Good</td>
+                                <td>Ahmed Khan</td>
+                                <td><span class="badge badge-available">Available</span></td>
+                                <td><a href="#" class="btn-delete">Delete</a></td>
+                            </tr>
+                            <!-- Sample Row 5 -->
+                            <tr>
+                                <td class="font-bold">Ergonomic Mesh Office Chair</td>
+                                <td>Furniture</td>
+                                <td>৳3,500</td>
+                                <td>Used-Good</td>
+                                <td>Raisa Rana</td>
+                                <td><span class="badge badge-available">Available</span></td>
+                                <td><a href="#" class="btn-delete">Delete</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <!-- Users Table -->
-            <div class="mb-12">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-black text-white">Registered Users</h2>
-                </div>
-                <div class="admin-table-container">
-                    <div class="overflow-x-auto">
-                        <table class="admin-table w-full">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Role</th>
-                                    <th>Joined Date</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($users as $user)
-                                    <tr>
-                                        <td>
-                                            <div class="flex items-center gap-3">
-                                                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-black text-xs uppercase">
-                                                    {{ substr($user->name, 0, 1) }}
-                                                </div>
-                                                <span class="font-bold">{{ $user->name }}</span>
-                                            </div>
-                                        </td>
-                                        <td>{{ $user->email }}</td>
-                                        <td>{{ $user->phone ?? 'N/A' }}</td>
-                                        <td>
-                                            <span class="role-badge role-{{ $user->role }}">
-                                                {{ $user->role }}
-                                            </span>
-                                        </td>
-                                        <td class="text-gray-500">{{ $user->created_at->format('M d, Y') }}</td>
-                                        <td>
-                                            @if($user->role !== 'admin')
-                                                <form action="{{ route('admin.users.delete', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="text-red-500 hover:text-red-700 font-bold transition-colors">Delete</button>
-                                                </form>
-                                            @else
-                                                <span class="text-gray-300 font-bold italic">Protected</span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
+    @endsection
+
+    {{-- Render styles and content because layout uses $slot but prompt asked for @section --}}
+    @yield('styles')
+    @yield('content')
 </x-app-layout>
