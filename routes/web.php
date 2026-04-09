@@ -46,6 +46,20 @@ Route::middleware(['auth', 'prevent-back'])->group(function () {
     Route::get('/report-issues', function() { return view('home'); })->name('issues.report');
     Route::get('/help-board', [\App\Http\Controllers\HelpBoardController::class, 'index'])->name('help.board');
 
+    // Wishlist Routes
+    Route::get('/wishlist', [\App\Http\Controllers\WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist/add', [\App\Http\Controllers\WishlistController::class, 'add'])->name('wishlist.add');
+    Route::delete('/wishlist/remove/{product_id}', [\App\Http\Controllers\WishlistController::class, 'remove'])->name('wishlist.remove');
+    Route::post('/wishlist/checkout', [\App\Http\Controllers\WishlistController::class, 'checkout'])->name('wishlist.checkout');
+    Route::get('/wishlist/check/{product_id}', [\App\Http\Controllers\WishlistController::class, 'isInWishlist'])->name('wishlist.check');
+
+    // Payment Routes
+    Route::post('/payment/checkout', [\App\Http\Controllers\PaymentController::class, 'checkout'])->name('payment.checkout');
+    Route::post('/payment/process', [\App\Http\Controllers\PaymentController::class, 'process'])->name('payment.process');
+    Route::post('/payment/buy/{product_id}', [\App\Http\Controllers\PaymentController::class, 'buy'])->name('payment.buy');
+    Route::get('/payment-history', [\App\Http\Controllers\PaymentController::class, 'history'])->name('payment.history');
+    Route::get('/sold-items', [\App\Http\Controllers\PaymentController::class, 'sold'])->name('payment.sold');
+
     // Profile Management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -66,8 +80,9 @@ Route::middleware(['auth', 'prevent-back', 'admin'])->prefix('admin')->name('adm
     // Additional admin routes requested for the dashboard navigation
     Route::get('/users', function() { return "Manage Users Page"; })->name('users');
     Route::get('/products', function() { return "Manage Products Page"; })->name('products');
-    Route::get('/analytics', function() { return "Analytics Page"; })->name('analytics');
-    Route::get('/categories', function() { return "Categories Page"; })->name('categories');
-    Route::get('/reports', function() { return "Reports Page"; })->name('reports');
-    Route::get('/settings', function() { return "Settings Page"; })->name('settings');
+    Route::get('/posts', function() { return "Manage Posts Page"; })->name('posts');
+    Route::get('/reports', function() { return "Manage Reports Page"; })->name('reports');
+    Route::get('/faq', function() { return "Manage FAQ Page"; })->name('faq');
+    Route::get('/reviews', function() { return "Manage Reviews Page"; })->name('reviews');
+    Route::get('/history', [\App\Http\Controllers\AdminController::class, 'history'])->name('history');
 });

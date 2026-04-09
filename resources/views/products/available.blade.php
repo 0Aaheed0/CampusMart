@@ -308,30 +308,86 @@
 
                                 <!-- Buy Now & Wishlist Buttons -->
                                 <div class="mt-4 flex gap-2">
-                                    <a href="{{ route('products.payment', $product->id) }}" 
-                                       class="flex-1 text-center bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition">
-                                        Buy Now
-                                    </a>
-                                    <div class="relative group/wishlist">
-                                        <button type="button" 
-                                                onclick="alert('Wishlist feature coming soon!')"
-                                                class="px-4 py-2 border-2 border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition group">
-                                            <svg class="w-5 h-5 group-hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                            </svg>
+                                    <form action="{{ route('payment.buy', $product->id) }}" method="POST" class="flex-1">
+                                        @csrf
+                                        <button type="submit" class="w-full text-center bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition">
+                                            Buy Now
                                         </button>
-                                        <!-- Tooltip -->
-                                        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-xs font-bold rounded opacity-0 group-hover/wishlist:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                                            Add to Wishlist
-                                            <!-- Tooltip Arrow -->
-                                            <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
-                                        </div>
-                                    </div>
+                                    </form>
+                                    <button type="button" 
+                                            onclick="addToWishlist({{ $product->id }}, this)"
+                                            id="wishlist-btn-{{ $product->id }}"
+                                            class="px-4 py-2 border-2 border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition group wishlist-btn"
+                                            data-product-id="{{ $product->id }}">
+                                        <svg class="w-5 h-5 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="heart-{{ $product->id }}">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
+
+                <!-- Script for Wishlist -->
+                <script>
+                    async function addToWishlist(productId, button) {
+                        try {
+                            const response = await fetch('{{ route("wishlist.add") }}', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: JSON.stringify({ product_id: productId })
+                            });
+
+                            if (response.ok) {
+                                const heart = document.getElementById(`heart-${productId}`);
+                                button.classList.remove('border-gray-200', 'text-gray-600');
+                                button.classList.add('border-red-500', 'text-red-500');
+                                heart.setAttribute('fill', 'currentColor');
+                                showNotification('Added to wishlist!', 'success');
+                            } else {
+                                const data = await response.json();
+                                showNotification(data.message || 'Already in wishlist', 'error');
+                            }
+                        } catch (error) {
+                            showNotification('Error adding to wishlist', 'error');
+                            console.error('Error:', error);
+                        }
+                    }
+
+                    function showNotification(message, type) {
+                        const notification = document.createElement('div');
+                        notification.className = `fixed bottom-4 right-4 p-4 rounded-lg text-white font-bold z-50 ${
+                            type === 'success' ? 'bg-green-500' : 'bg-red-500'
+                        } animate-bounce`;
+                        notification.textContent = message;
+                        document.body.appendChild(notification);
+                        setTimeout(() => notification.remove(), 3000);
+                    }
+
+                    // Check which products are in wishlist on page load
+                    document.addEventListener('DOMContentLoaded', async () => {
+                        const buttons = document.querySelectorAll('.wishlist-btn');
+                        for (let button of buttons) {
+                            const productId = button.dataset.productId;
+                            try {
+                                const response = await fetch(`{{ route('wishlist.check', ':id') }}`.replace(':id', productId));
+                                const data = await response.json();
+                                if (data.in_wishlist) {
+                                    const heart = document.getElementById(`heart-${productId}`);
+                                    button.classList.remove('border-gray-200', 'text-gray-600');
+                                    button.classList.add('border-red-500', 'text-red-500');
+                                    heart.setAttribute('fill', 'currentColor');
+                                }
+                            } catch (error) {
+                                console.error('Error checking wishlist:', error);
+                            }
+                        }
+                    });
+                </script>
 
                 <!-- Pagination -->
                 @if($products->hasPages())

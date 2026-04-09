@@ -26,4 +26,14 @@ class PostProduct extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function wishlistedBy()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function paymentItems()
+    {
+        return $this->hasMany(PaymentItem::class);
+    }
 }

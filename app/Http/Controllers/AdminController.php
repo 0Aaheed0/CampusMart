@@ -65,4 +65,18 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Product deleted successfully.');
     }
+
+    /**
+     * Display transaction history for all users (buyers and sellers).
+     *
+     * @return \Illuminate\View\View
+     */
+    public function history()
+    {
+        $payments = \App\Models\Payment::with(['buyer', 'items.seller', 'items.product'])
+            ->orderByDesc('created_at')
+            ->paginate(15);
+
+        return view('admin.history', compact('payments'));
+    }
 }
