@@ -51,3 +51,14 @@ Route::middleware(['auth', 'prevent-back'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 });
+
+/*
+|--------------------------------------------------------------------------
+| Admin Routes (Require Admin Role)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'prevent-back', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
+    Route::delete('/users/{id}', [\App\Http\Controllers\AdminController::class, 'deleteUser'])->name('users.delete');
+    Route::delete('/products/{id}', [\App\Http\Controllers\AdminController::class, 'deleteProduct'])->name('products.delete');
+});

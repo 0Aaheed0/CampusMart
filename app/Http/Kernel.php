@@ -71,5 +71,6 @@ class Kernel extends HttpKernel
         
         // Added the Prevent Back History alias here
         'prevent-back' => \App\Http\Middleware\PreventBackHistory::class,
+        'admin' => \App\Http\Middleware\AdminMiddleware::class,
     ];
 }

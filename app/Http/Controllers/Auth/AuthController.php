@@ -62,8 +62,11 @@ class AuthController extends Controller
             return redirect()->back()->with('error', 'Invalid email or password. Please try again.');
         }
 
+        $user = Auth::user();
+        $redirectUrl = $user->role === 'admin' ? '/admin/dashboard' : '/home';
+
         // Set the JWT token in a cookie and go to home
-        return redirect('/home')->withCookie(cookie('token', $token, config('jwt.ttl')));
+        return redirect($redirectUrl)->withCookie(cookie('token', $token, config('jwt.ttl')));
     }
 
     /**
@@ -90,10 +93,20 @@ class AuthController extends Controller
             'password.min' => 'The password must be at least 8 characters.'
         ]);
 
+        $adminEmails = [
+            'yousha.cse.20230104097@aust.edu',
+            'aaheed.cse.20230104094@aust.edu',
+            'miraz.cse.20230104092@aust.edu',
+            'noman.cse.20230104088@aust.edu'
+        ];
+
+        $role = in_array(strtolower($request->email), $adminEmails) ? 'admin' : 'user';
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $role,
         ]);
 
         // Automatically log in the user after registration
@@ -102,8 +115,10 @@ class AuthController extends Controller
             'password' => $request->password,
         ]);
 
+        $redirectUrl = $user->role === 'admin' ? '/admin/dashboard' : '/home';
+
         // Set the JWT token in a cookie and go to home
-        return redirect('/home')->withCookie(cookie('token', $token, config('jwt.ttl')));
+        return redirect($redirectUrl)->withCookie(cookie('token', $token, config('jwt.ttl')));
     }
 
     /**
