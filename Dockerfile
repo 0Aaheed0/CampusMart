@@ -1,18 +1,11 @@
-# Dockerfile
-# Multi-stage build for CampusMart Laravel Application
-# This Dockerfile sets up a PHP-FPM container for running the CampusMart marketplace
+FROM php:8.2-apache
 
-FROM php:8.2-fpm
-
-# Metadata
 LABEL maintainer="CampusMart Development Team"
 LABEL description="CampusMart Laravel Application Server"
 LABEL version="1.0"
 
-# Set working directory
 WORKDIR /var/www/html
 
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -26,9 +19,10 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     mariadb-client \
     ca-certificates \
+    nodejs \
+    npm \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions required for Laravel
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
     pdo_mysql \
@@ -37,45 +31,34 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     exif \
     pcntl \
     bcmath \
-    gd \
-    xml \
-    json
+    gd
 
-# Install Composer (latest version)
+RUN a2enmod rewrite
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Create a non-root user for security
-RUN useradd -m -u 1000 www-data || true
-
-# Copy project files
 COPY . .
 
-# Set permissions before composer install
-RUN chown -R www-data:www-data /var/www/html
-
-# Switch to www-data user
-USER www-data
-
-# Install PHP dependencies (Composer)
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 
-# Switch back to root to set final permissions
-USER root
+RUN npm ci && npm run build
 
-# Set proper permissions for Laravel directories
-RUN chown -R www-data:www-data /var/www/html
-RUN chmod -R 755 /var/www/html/storage
-RUN chmod -R 755 /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage \
+    && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Generate Laravel key if not already set
-RUN if [ ! -f .env ]; then cp .env.example .env 2>/dev/null || true; fi
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' \
+    /etc/apache2/sites-available/*.conf \
+    /etc/apache2/apache2.conf
 
-# Clear Laravel cache and config for Docker environment
-RUN php artisan config:clear 2>/dev/null || true
-RUN php artisan cache:clear 2>/dev/null || true
+RUN echo "Listen \${PORT}" > /etc/apache2/ports.conf \
+    && sed -i 's/<VirtualHost \*:80>/<VirtualHost *:${PORT}>/' \
+    /etc/apache2/sites-available/000-default.conf
 
-# Expose port 9000 for PHP-FPM
-EXPOSE 9000
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Start PHP-FPM
-CMD ["php-fpm"]
+EXPOSE 8080
+
+CMD ["docker-entrypoint.sh"]
