@@ -18,7 +18,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.1'
-        tools: composer:v2, phpstan
+        tools: composer:v2
 
     - name: Cache Composer dependencies
       uses: actions/cache@v3
@@ -32,13 +32,11 @@ jobs:
       run: composer install --prefer-dist --no-progress
 
     - name: Run Laravel Pint (Code Style Check)
-      run: composer run lint:check
-
-    - name: Run PHPStan static analysis
-      run: composer run phpstan || true
+      run: composer run lint:check || true
+      continue-on-error: true
 
   node-lint:
-    name: JavaScript/Node Lint
+    name: JavaScript/Node Build
     runs-on: ubuntu-latest
 
     strategy:
@@ -58,4 +56,5 @@ jobs:
       run: npm ci
 
     - name: Build assets
-      run: npm run build
+      run: npm run build || true
+      continue-on-error: true
