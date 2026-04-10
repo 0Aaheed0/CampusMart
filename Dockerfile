@@ -43,7 +43,7 @@ COPY . .
 
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 
-RUN npm ci && npm run build
+RUN npm install && npm run build
 
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
