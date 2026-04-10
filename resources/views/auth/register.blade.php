@@ -4,11 +4,14 @@
 <meta charset="UTF-8">
 <title>Sign Up | CampusMart</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- Google One Tap SDK -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <style>
 
@@ -221,27 +224,40 @@ color:#fecaca;
 </div>
 @endif
 
+<!-- Google One Tap Container -->
+<div id="g_id_onload"
+     data-client_id="{{ env('GOOGLE_CLIENT_ID') }}"
+     data-callback="handleCredentialResponse">
+</div>
+<div class="g_id_signin" data-type="standard" data-size="large" data-theme="dark" data-text="signup_with" data-shape="rectangular" data-logo_alignment="left"></div>
+
+<div style="display: flex; align-items: center; margin: 25px 0; gap: 12px;">
+    <div style="flex: 1; height: 1px; background: rgba(255, 255, 255, 0.2);"></div>
+    <span style="font-size: 0.75rem; color: #cbd5f5; font-weight: 600;">OR</span>
+    <div style="flex: 1; height: 1px; background: rgba(255, 255, 255, 0.2);"></div>
+</div>
+
 <form method="POST" action="{{ route('register') }}">
 @csrf
 
 <div class="input-group">
-<input type="text" name="name" placeholder="Full Name" value="{{ old('name') }}" required>
+<input type="text" name="name" placeholder="Full Name" value="{{ old('name') }}" autocomplete="name" required>
 <i class="fas fa-user"></i>
 </div>
 
 <div class="input-group">
-<input type="email" name="email" placeholder="Email Address (@aust.edu)" value="{{ old('email') }}" required>
+<input type="email" name="email" placeholder="Email Address (@aust.edu)" value="{{ old('email') }}" autocomplete="email" required>
 <i class="fas fa-envelope"></i>
 </div>
 
 <div class="input-group">
-<input type="password" id="password" name="password" placeholder="Create Password" required>
+<input type="password" id="password" name="password" placeholder="Create Password" autocomplete="new-password" required>
 <i class="fas fa-lock"></i>
 <i class="fas fa-eye password-toggle" onclick="togglePass('password')"></i>
 </div>
 
 <div class="input-group">
-<input type="password" id="confirm" name="password_confirmation" placeholder="Confirm Password" required>
+<input type="password" id="confirm" name="password_confirmation" placeholder="Confirm Password" autocomplete="new-password" required>
 <i class="fas fa-shield-alt"></i>
 <i class="fas fa-eye password-toggle" onclick="togglePass('confirm')"></i>
 </div>
@@ -259,20 +275,63 @@ Already have an account?
 
 </div>
 
+</div>
+
 <script>
 
-function togglePass(id){
-const field=document.getElementById(id)
-const icon=field.nextElementSibling.nextElementSibling
-
-if(field.type==="password"){
-field.type="text"
-icon.classList.replace("fa-eye","fa-eye-slash")
-}else{
-field.type="password"
-icon.classList.replace("fa-eye-slash","fa-eye")
+// Handle Google One Tap response
+function handleCredentialResponse(response) {
+    // Send token to server
+    fetch('{{ route("auth.google-one-tap") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+        },
+        body: JSON.stringify({
+            credential: response.credential
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = data.redirect || '{{ route("home") }}';
+        } else {
+            alert('Authentication failed: ' + data.message);
+        }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        alert('Authentication error');
+    });
 }
 
+// Initialize Google Sign-In
+window.onload = function() {
+    google.accounts.id.initialize({
+        client_id: '{{ env("GOOGLE_CLIENT_ID") }}',
+        callback: handleCredentialResponse,
+        auto_select: false,
+    });
+    
+    // Display One Tap UI
+    google.accounts.id.renderButton(
+        document.querySelector('.g_id_signin'),
+        { theme: 'dark', size: 'large', text: 'signup_with' }
+    );
+};
+
+function togglePass(id){
+    const field = document.getElementById(id);
+    const icon = field.nextElementSibling.nextElementSibling;
+
+    if(field.type === "password"){
+        field.type = "text";
+        icon.classList.replace("fa-eye", "fa-eye-slash");
+    } else {
+        field.type = "password";
+        icon.classList.replace("fa-eye-slash", "fa-eye");
+    }
 }
 
 </script>

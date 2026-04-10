@@ -22,8 +22,22 @@ class PostProduct extends Model
         'status',
     ];
 
+    protected $attributes = [
+        'status' => 'available',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function wishlistedBy()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function paymentItems()
+    {
+        return $this->hasMany(PaymentItem::class);
     }
 }

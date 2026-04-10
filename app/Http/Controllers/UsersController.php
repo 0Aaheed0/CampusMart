@@ -105,5 +105,30 @@ class UsersController extends Controller
             ]
         ]);
     }
-}
 
+    /**
+     * Get user profile data for popup display
+     */
+    public function popup($id)
+    {
+        $user = \App\Models\User::with('profile')->findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone ?? 'Not provided',
+                'department' => $user->profile?->department ?? 'Not specified',
+                'year' => $user->profile?->year ?? 'Not specified',
+                'semester' => $user->profile?->semester ?? 'Not specified',
+                'student_id' => $user->profile?->student_id ?? 'Not specified',
+                'batch' => $user->profile?->batch ?? 'Not specified',
+                'gender' => $user->profile?->gender ?? 'Not specified',
+                'products_posted' => $user->products()->count(),
+                'products_sold' => $user->soldItems()->count(),
+            ]
+        ]);
+    }
+}
