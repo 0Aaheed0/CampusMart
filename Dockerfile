@@ -21,7 +21,6 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js 18 properly
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs
 
@@ -36,6 +35,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     gd
 
 RUN a2enmod rewrite
+RUN a2dismod mpm_event mpm_worker || true && a2enmod mpm_prefork
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
