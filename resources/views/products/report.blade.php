@@ -47,7 +47,7 @@
                     <p class="text-blue-300 font-bold mt-2 opacity-80">Help us keep CampusMart safe</p>
                 </div>
 
-                <form action="{{ route('reports.store') }}" method="POST" class="space-y-6">
+                <form action="{{ route('reports.store') }}" method="POST" class="space-y-6" id="reportForm">
                     @csrf
                     
                     <!-- Report Type -->
@@ -105,20 +105,109 @@
             const reportType = document.getElementById('report_type').value;
             const productContainer = document.getElementById('product_id_container');
             const userContainer = document.getElementById('user_id_container');
+            const productInput = document.getElementById('product_id');
+            const userInput = document.getElementById('reported_user_id');
 
             if (reportType === 'product') {
                 productContainer.classList.remove('hidden');
                 userContainer.classList.add('hidden');
+                productInput.required = true;
+                userInput.required = false;
             } else if (reportType === 'user') {
-                productContainer.classList.add('hidden');
-                userContainer.classList.remove('hidden');
+                productContainer.classList.remove('hidden');
+                userContainer.classList.add('hidden');
+                productInput.required = true;
+                productInput.placeholder = 'Enter Product ID to identify the user';
+                userInput.required = false;
             } else {
                 productContainer.classList.add('hidden');
                 userContainer.classList.add('hidden');
+                productInput.required = false;
+                userInput.required = false;
             }
         }
 
         // Run once on load to set initial state
-        document.addEventListener('DOMContentLoaded', toggleReportFields);
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleReportFields();
+            
+            // Handle form submission with AJAX
+            const form = document.getElementById('reportForm');
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(form);
+                
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json',
+                        },
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        // Show success toast
+                        showSuccessToast(data.message);
+                        
+                        // Reset form
+                        form.reset();
+                        toggleReportFields();
+                        
+                        // Clear any previous errors
+                        document.querySelectorAll('.text-red-500').forEach(el => {
+                            el.textContent = '';
+                        });
+                    } else {
+                        showErrorToast(data.message || 'An error occurred');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showErrorToast('Failed to submit report. Please try again.');
+                }
+            });
+        });
+        
+        function showSuccessToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 right-4 bg-green-500/20 border border-green-500/50 text-green-200 px-6 py-4 rounded-2xl flex items-center space-x-3 z-50';
+            toast.innerHTML = `
+                <svg class="w-6 h-6 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span class="font-bold">${message}</span>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+        
+        function showErrorToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 right-4 bg-red-500/20 border border-red-500/50 text-red-200 px-6 py-4 rounded-2xl flex items-center space-x-3 z-50';
+            toast.innerHTML = `
+                <svg class="w-6 h-6 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <span class="font-bold">${message}</span>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
     </script>
 </x-app-layout>
