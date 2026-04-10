@@ -19,9 +19,11 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     mariadb-client \
     ca-certificates \
-    nodejs \
-    npm \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js 18 properly
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
