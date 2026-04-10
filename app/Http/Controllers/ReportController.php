@@ -29,30 +29,45 @@ class ReportController extends Controller
         $validated = $request->validate([
             'report_type' => 'required|in:product,user,other',
             'product_id' => 'nullable|exists:post_products,id',
-            'reported_user_id' => 'nullable|exists:users,id',
             'reason' => 'required|string|max:255',
             'description' => 'required|string|max:2000',
         ]);
 
-        // Ensure at least one target is provided
-        if ($validated['report_type'] === 'product' && !$validated['product_id']) {
-            return back()->with('error', 'Product is required for product reports.');
-        }
-
-        if ($validated['report_type'] === 'user' && !$validated['reported_user_id']) {
-            return back()->with('error', 'User is required for user reports.');
-        }
-
-        // Create the report
-        Report::create([
+        $reportData = [
             'user_id' => Auth::id(),
-            'product_id' => $validated['product_id'] ?? null,
-            'reported_user_id' => $validated['reported_user_id'] ?? null,
             'report_type' => $validated['report_type'],
             'reason' => $validated['reason'],
             'description' => $validated['description'],
             'status' => 'pending',
-        ]);
+        ];
+
+        // Handle ID mapping logic based on report type
+        if ($validated['report_type'] === 'product') {
+            // For product reports, store the product_id directly
+            if (!$validated['product_id']) {
+                return back()->with('error', 'Product ID is required for product reports.');
+            }
+            $reportData['product_id'] = $validated['product_id'];
+        } elseif ($validated['report_type'] === 'user') {
+            // For user reports, user inputs product_id, system looks up owner
+            if (!$validated['product_id']) {
+                return back()->with('error', 'Product ID is required to identify the user.');
+            }
+            
+            // Find the product and get the owner
+            $product = PostProduct::find($validated['product_id']);
+            if (!$product) {
+                return back()->with('error', 'Product not found.');
+            }
+            
+            // Store both product_id and the owner's user_id as reported_user_id
+            $reportData['product_id'] = $validated['product_id'];
+            $reportData['reported_user_id'] = $product->user_id;
+        }
+        // For 'other' type, neither product_id nor reported_user_id is set
+
+        // Create the report
+        Report::create($reportData);
 
         return back()->with('success', 'Report submitted successfully. Our team will review it shortly.');
     }

@@ -36,44 +36,54 @@
                 </div>
 
                 <!-- Form Section -->
-                <form class="space-y-6" onsubmit="return false;">
+                <form method="POST" action="{{ route('reports.store') }}" class="space-y-6">
+                    @csrf
+
                     <!-- Report Type -->
                     <div>
                         <label for="report_type" class="text-[11px] font-black text-blue-300/60 uppercase ml-1 tracking-widest block mb-2">Report Type</label>
-                        <select id="report_type" name="report_type" onchange="toggleReportFields()" class="mt-1 block w-full rounded-2xl border-none bg-[#0f172a] focus:ring-2 focus:ring-[#3b5bdb] transition-all font-bold text-white px-4 py-4 cursor-pointer">
-                            <option value="product">Product</option>
-                            <option value="user">User</option>
-                            <option value="other">Other</option>
+                        <select id="report_type" name="report_type" onchange="toggleReportFields()" class="mt-1 block w-full rounded-2xl border-none bg-[#0f172a] focus:ring-2 focus:ring-[#3b5bdb] transition-all font-bold text-white px-4 py-4 cursor-pointer" required>
+                            <option value="">-- Select Report Type --</option>
+                            <option value="product">Product Issue</option>
+                            <option value="user">Report a User</option>
+                            <option value="other">Other Issue</option>
                         </select>
+                        @error('report_type')
+                            <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
-                    <!-- Product ID (Visible for product) -->
-                    <div id="product_id_container">
-                        <label for="product_id" class="text-[11px] font-black text-blue-300/60 uppercase ml-1 tracking-widest block mb-2">Product ID (if reporting a product)</label>
+                    <!-- Product ID (Visible for product and user types) -->
+                    <div id="product_id_container" class="hidden">
+                        <label for="product_id" id="product_id_label" class="text-[11px] font-black text-blue-300/60 uppercase ml-1 tracking-widest block mb-2">Product ID</label>
                         <input id="product_id" name="product_id" type="number" class="mt-1 block w-full rounded-2xl border-none bg-[#0f172a] focus:ring-2 focus:ring-[#3b5bdb] transition-all font-bold text-white px-4 py-4" placeholder="Enter Product ID" />
-                    </div>
-
-                    <!-- Reported User ID (Visible for user) -->
-                    <div id="user_id_container" class="hidden">
-                        <label for="reported_user_id" class="text-[11px] font-black text-blue-300/60 uppercase ml-1 tracking-widest block mb-2">Reported User ID (if reporting a user)</label>
-                        <input id="reported_user_id" name="reported_user_id" type="number" class="mt-1 block w-full rounded-2xl border-none bg-[#0f172a] focus:ring-2 focus:ring-[#3b5bdb] transition-all font-bold text-white px-4 py-4" placeholder="Enter User ID" />
+                        <p id="product_id_hint" class="text-xs text-gray-400 mt-1"></p>
+                        @error('product_id')
+                            <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <!-- Reason -->
                     <div>
-                        <label for="reason" class="text-[11px] font-black text-blue-300/60 uppercase ml-1 tracking-widest block mb-2">Reason</label>
-                        <input id="reason" name="reason" type="text" class="mt-1 block w-full rounded-2xl border-none bg-[#0f172a] focus:ring-2 focus:ring-[#3b5bdb] transition-all font-bold text-white px-4 py-4" placeholder="e.g. Fake Product, Spam, Harassment" />
+                        <label for="reason" class="text-[11px] font-black text-blue-300/60 uppercase ml-1 tracking-widest block mb-2">Reason/Category</label>
+                        <input id="reason" name="reason" type="text" class="mt-1 block w-full rounded-2xl border-none bg-[#0f172a] focus:ring-2 focus:ring-[#3b5bdb] transition-all font-bold text-white px-4 py-4" placeholder="e.g. Fake Product, Spam, Inappropriate Content, Harassment" required />
+                        @error('reason')
+                            <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <!-- Description -->
                     <div>
-                        <label for="description" class="text-[11px] font-black text-blue-300/60 uppercase ml-1 tracking-widest block mb-2">Description</label>
-                        <textarea id="description" name="description" rows="4" class="mt-1 block w-full rounded-3xl border-none bg-[#0f172a] focus:ring-2 focus:ring-[#3b5bdb] transition-all font-bold text-white p-4 outline-none resize-none" placeholder="Describe the issue in detail..."></textarea>
+                        <label for="description" class="text-[11px] font-black text-blue-300/60 uppercase ml-1 tracking-widest block mb-2">Detailed Description</label>
+                        <textarea id="description" name="description" rows="5" class="mt-1 block w-full rounded-3xl border-none bg-[#0f172a] focus:ring-2 focus:ring-[#3b5bdb] transition-all font-bold text-white p-4 outline-none resize-none" placeholder="Please describe the issue in detail..." required></textarea>
+                        @error('description')
+                            <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <!-- Submit Button -->
                     <div class="pt-6">
-                        <button type="button" class="w-full bg-[#3b5bdb] text-white py-5 rounded-2xl font-black text-lg shadow-xl shadow-[#3b5bdb]/20 hover:scale-[1.01] transition-all active:scale-95 btn-glow uppercase tracking-widest">
+                        <button type="submit" class="w-full bg-[#3b5bdb] text-white py-5 rounded-2xl font-black text-lg shadow-xl shadow-[#3b5bdb]/20 hover:scale-[1.01] transition-all active:scale-95 btn-glow uppercase tracking-widest">
                             Submit Report
                         </button>
                     </div>
@@ -86,17 +96,24 @@
         function toggleReportFields() {
             const reportType = document.getElementById('report_type').value;
             const productContainer = document.getElementById('product_id_container');
-            const userContainer = document.getElementById('user_id_container');
+            const productLabel = document.getElementById('product_id_label');
+            const productHint = document.getElementById('product_id_hint');
+            const productInput = document.getElementById('product_id');
 
-            // Show Product ID for both 'product' and 'user' types, hide for 'other'
-            if (reportType === 'product' || reportType === 'user') {
+            if (reportType === 'product') {
                 productContainer.classList.remove('hidden');
-            } else {
+                productLabel.textContent = 'Product ID Being Reported';
+                productHint.textContent = 'Enter the ID of the product with an issue';
+                productInput.required = true;
+            } else if (reportType === 'user') {
+                productContainer.classList.remove('hidden');
+                productLabel.textContent = 'Product ID (to identify user)';
+                productHint.textContent = 'Enter a product ID posted by the user to identify them';
+                productInput.required = true;
+            } else if (reportType === 'other') {
                 productContainer.classList.add('hidden');
+                productInput.required = false;
             }
-
-            // Reported User ID field should never be shown
-            userContainer.classList.add('hidden');
         }
 
         // Initialize state on load

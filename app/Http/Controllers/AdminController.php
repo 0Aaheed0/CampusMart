@@ -113,18 +113,36 @@ class AdminController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function reports()
+    public function reports(Request $request)
     {
-        $reports = \App\Models\Report::with(['user', 'product', 'reportedUser', 'admin'])
-            ->orderByDesc('created_at')
-            ->paginate(15);
+        $filter = $request->get('filter', 'all');
+
+        // Build query with filtering
+        $query = \App\Models\Report::with(['user', 'product', 'reportedUser', 'admin']);
+
+        if ($filter && $filter !== 'all') {
+            $query->where('report_type', $filter);
+        }
+
+        $reports = $query->orderByDesc('created_at')->paginate(15);
 
         $totalReports = \App\Models\Report::count();
-        $pendingReports = \App\Models\Report::where('status', 'pending')->count();
-        $resolvedReports = \App\Models\Report::where('status', 'resolved')->count();
-        $todayReports = \App\Models\Report::whereDate('created_at', today())->count();
+        $productReports = \App\Models\Report::where('report_type', 'product')->count();
+        $userReports = \App\Models\Report::where('report_type', 'user')->count();
+        $otherReports = \App\Models\Report::where('report_type', 'other')->count();
+        $solvedReports = \App\Models\Report::where('status', 'resolved')->count();
+        $unsolvedReports = \App\Models\Report::whereIn('status', ['pending', 'reviewed'])->count();
 
-        return view('admin.reports', compact('reports', 'totalReports', 'pendingReports', 'resolvedReports', 'todayReports'));
+        return view('admin.reports', compact(
+            'reports',
+            'filter',
+            'totalReports',
+            'productReports',
+            'userReports',
+            'otherReports',
+            'solvedReports',
+            'unsolvedReports'
+        ));
     }
 
     /**
@@ -145,6 +163,52 @@ class AdminController extends Controller
         ]);
 
         return back()->with('success', 'Report status updated successfully.');
+    }
+
+    /**
+     * Toggle report status between pending and resolved (AJAX)
+     */
+    public function toggleReportStatus(Request $request, $id)
+    {
+        $report = \App\Models\Report::findOrFail($id);
+        
+        // Toggle between pending and resolved
+        $newStatus = ($report->status === 'pending' || $report->status === 'reviewed') ? 'resolved' : 'pending';
+        
+        $report->update([
+            'status' => $newStatus,
+            'admin_id' => Auth::id(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'status' => $newStatus,
+            'message' => 'Report status updated to ' . ucfirst($newStatus),
+        ]);
+    }
+
+    /**
+     * Get report details via AJAX for modal
+     */
+    public function getReportDetails($id)
+    {
+        $report = \App\Models\Report::with(['user', 'product', 'reportedUser'])
+            ->findOrFail($id);
+
+        return response()->json([
+            'id' => $report->id,
+            'reporter_name' => $report->user->name ?? 'Unknown',
+            'reporter_email' => $report->user->email ?? 'N/A',
+            'report_type' => ucfirst($report->report_type),
+            'reason' => $report->reason,
+            'description' => $report->description,
+            'status' => ucfirst($report->status),
+            'created_at' => $report->created_at->format('M d, Y • H:i A'),
+            'product_id' => $report->product_id,
+            'product_name' => $report->product?->product_name ?? 'N/A',
+            'reported_user_id' => $report->reported_user_id,
+            'reported_user_name' => $report->reportedUser?->name ?? 'N/A',
+        ]);
     }
 
     /**

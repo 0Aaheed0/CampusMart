@@ -93,6 +93,8 @@ Route::middleware(['auth', 'prevent-back', 'admin'])->prefix('admin')->name('adm
     Route::get('/posts', function() { return "Manage Posts Page"; })->name('posts');
     Route::get('/reports', [\App\Http\Controllers\AdminController::class, 'reports'])->name('reports');
     Route::patch('/reports/{id}', [\App\Http\Controllers\AdminController::class, 'updateReportStatus'])->name('reports.update');
+    Route::post('/reports/{id}/toggle-status', [\App\Http\Controllers\AdminController::class, 'toggleReportStatus'])->name('reports.toggle-status');
+    Route::get('/reports/{id}/details', [\App\Http\Controllers\AdminController::class, 'getReportDetails'])->name('reports.details');
     Route::get('/faq', [\App\Http\Controllers\HelpBoardController::class, 'adminIndex'])->name('faq');
     Route::get('/faq/create', [\App\Http\Controllers\HelpBoardController::class, 'adminCreate'])->name('faq.create');
     Route::post('/faq', [\App\Http\Controllers\HelpBoardController::class, 'adminStore'])->name('faq.store');
