@@ -234,7 +234,7 @@
 
     <!-- Google One Tap Container -->
     <div id="g_id_onload"
-         data-client_id="{{ env('GOOGLE_CLIENT_ID') }}"
+         data-client_id="{{ config('google.client_id') }}"
          data-callback="handleCredentialResponse">
     </div>
     <div class="g_id_signin" data-type="standard" data-size="large" data-theme="dark" data-text="signin_with" data-shape="rectangular" data-logo_alignment="left"></div>
@@ -310,9 +310,8 @@
     // Initialize Google Sign-In
     window.onload = function() {
         google.accounts.id.initialize({
-            client_id: '{{ env("GOOGLE_CLIENT_ID") }}',
+            client_id: '{{ config('google.client_id') }}',
             callback: handleCredentialResponse,
-            auto_select: true,
         });
         
         // Display One Tap UI if not signed in
