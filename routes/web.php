@@ -22,6 +22,9 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
+    
+    // Google One Tap (accessible to guests)
+    Route::post('/auth/google-one-tap', [\App\Http\Controllers\Auth\GoogleOneTapController::class, 'handleOneTap'])->name('auth.google-one-tap');
 });
 
 // Logout (Needs to be accessible to logged-in users)
