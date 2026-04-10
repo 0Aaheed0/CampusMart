@@ -44,7 +44,7 @@ Route::middleware(['auth', 'prevent-back'])->group(function () {
     Route::get('/payment/{id}', [\App\Http\Controllers\ProductController::class, 'payment'])->name('products.payment');
     Route::get('/reviews', [\App\Http\Controllers\ReviewController::class, 'index'])->name('reviews.index');
     Route::post('/reviews', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
-    Route::get('/report-issues', function() { return view('home'); })->name('issues.report');
+    Route::view('/report-issues', 'report-issues')->name('issues.report');
     Route::get('/help-board', [\App\Http\Controllers\HelpBoardController::class, 'index'])->name('help.board');
 
     // Wishlist Routes
