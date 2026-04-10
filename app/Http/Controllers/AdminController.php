@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\PostProduct;
 
@@ -172,5 +173,64 @@ class AdminController extends Controller
             'soldProducts',
             'todayProducts'
         ));
+    }
+
+    /**
+     * Display all users in the admin panel
+     *
+     * @return \Illuminate\View\View
+     */
+    public function users()
+    {
+        // Fetch all users with pagination
+        $users = User::orderByDesc('created_at')->paginate(20);
+
+        // Get statistics
+        $totalUsers = User::count();
+        $adminUsers = User::where('role', 'admin')->count();
+        $regularUsers = User::where('role', 'user')->count();
+        $todayUsers = User::whereDate('created_at', today())->count();
+
+        return view('admin.users', compact(
+            'users',
+            'totalUsers',
+            'adminUsers',
+            'regularUsers',
+            'todayUsers'
+        ));
+    }
+
+    /**
+     * Get user profile data via AJAX
+     * Returns profile information in JSON format
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getUserProfile($id)
+    {
+        $user = User::with('profile')->findOrFail($id);
+
+        return response()->json([
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'role' => $user->role,
+                'avatar' => $user->avatar,
+                'created_at' => $user->created_at->format('M d, Y'),
+            ],
+            'profile' => $user->profile ? [
+                'department' => $user->profile->department ?? 'N/A',
+                'year' => $user->profile->year ?? 'N/A',
+                'semester' => $user->profile->semester ?? 'N/A',
+                'student_id' => $user->profile->student_id ?? 'N/A',
+                'batch' => $user->profile->batch ?? 'N/A',
+                'gender' => $user->profile->gender ?? 'N/A',
+                'number' => $user->profile->number ?? 'N/A',
+                'profile_picture' => $user->profile->profile_picture ?? null,
+            ] : null,
+        ]);
     }
 }
