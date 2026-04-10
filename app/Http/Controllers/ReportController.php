@@ -69,6 +69,14 @@ class ReportController extends Controller
         // Create the report
         Report::create($reportData);
 
+        // Return JSON for AJAX requests, redirect for regular form submissions
+        if ($request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Report submitted successfully. Our team will review it shortly.'
+            ]);
+        }
+
         return back()->with('success', 'Report submitted successfully. Our team will review it shortly.');
     }
 
