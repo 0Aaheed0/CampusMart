@@ -145,4 +145,32 @@ class AdminController extends Controller
 
         return back()->with('success', 'Report status updated successfully.');
     }
+
+    /**
+     * Display all product posts in the admin panel
+     * Uses Eager Loading to avoid N+1 queries
+     *
+     * @return \Illuminate\View\View
+     */
+    public function products()
+    {
+        // Fetch all products with user data using eager loading
+        $products = PostProduct::with('user')
+            ->orderByDesc('created_at')
+            ->paginate(20);
+
+        // Get statistics
+        $totalProducts = PostProduct::count();
+        $availableProducts = PostProduct::where('status', 'available')->count();
+        $soldProducts = PostProduct::where('status', 'sold')->count();
+        $todayProducts = PostProduct::whereDate('created_at', today())->count();
+
+        return view('admin.products', compact(
+            'products', 
+            'totalProducts', 
+            'availableProducts', 
+            'soldProducts',
+            'todayProducts'
+        ));
+    }
 }

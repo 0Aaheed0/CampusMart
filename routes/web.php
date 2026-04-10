@@ -88,7 +88,7 @@ Route::middleware(['auth', 'prevent-back', 'admin'])->prefix('admin')->name('adm
     
     // Additional admin routes requested for the dashboard navigation
     Route::get('/users', function() { return "Manage Users Page"; })->name('users');
-    Route::get('/products', function() { return "Manage Products Page"; })->name('products');
+    Route::get('/products', [\App\Http\Controllers\AdminController::class, 'products'])->name('products');
     Route::get('/posts', function() { return "Manage Posts Page"; })->name('posts');
     Route::get('/reports', [\App\Http\Controllers\AdminController::class, 'reports'])->name('reports');
     Route::patch('/reports/{id}', [\App\Http\Controllers\AdminController::class, 'updateReportStatus'])->name('reports.update');
