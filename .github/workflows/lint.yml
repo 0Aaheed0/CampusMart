@@ -31,11 +31,11 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
-    - name: Run Laravel Pint (Code Style Fixer)
-      run: composer run lint --ansi
+    - name: Run Laravel Pint (Code Style Check)
+      run: composer run lint:check
 
     - name: Run PHPStan static analysis
-      run: composer run phpstan --ansi || true
+      run: composer run phpstan || true
 
   node-lint:
     name: JavaScript/Node Lint
