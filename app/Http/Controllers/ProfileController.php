@@ -16,7 +16,16 @@ class ProfileController extends Controller
     public function edit(Request $request): View
     {
         $user = $request->user();
-        $profile = $user->profile ?? new Profile();
+        $profile = $user->profile ?? new Profile([
+            'department'      => null,
+            'student_id'      => null,
+            'batch'           => null,
+            'year'            => null,
+            'semester'        => null,
+            'gender'          => null,
+            'number'          => null,
+            'profile_picture' => null,
+        ]);
 
         return view('profile.edit', [
             'user'    => $user,
@@ -47,7 +56,7 @@ class ProfileController extends Controller
 
         if ($user->email !== $request->email) {
             $user->email = $request->email;
-            $user->email_verified_at = null; // reset verification on email change
+            $user->email_verified_at = null;
         }
 
         if ($request->filled('password')) {
@@ -81,8 +90,12 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
-        Auth::logout();
+        // Delete profile first to avoid FK constraint issues
+        $user->profile()->delete();
+
         $user->delete();
+
+        Auth::guard('web')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
