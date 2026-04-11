@@ -53,8 +53,20 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-composer-
 
-    - name: Install dependencies
+    - name: Install PHP dependencies
       run: composer install --prefer-dist --no-progress
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install Node dependencies
+      run: npm ci
+
+    - name: Build Vite assets
+      run: npm run build
 
     - name: Copy .env file
       run: cp .env.example .env
