@@ -83,23 +83,22 @@ class ProfileController extends Controller
     }
 
     public function destroy(Request $request): RedirectResponse
-    {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
+{
+    $request->validateWithBag('userDeletion', [
+        'password' => ['required', 'current_password'],
+    ]);
 
-        $user = $request->user();
+    $user = $request->user();
 
-        // Delete profile first to avoid FK constraint issues
-        $user->profile()->delete();
+    // Log out BEFORE deleting so session is cleared properly
+    Auth::guard('web')->logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
 
-        $user->delete();
+    // Delete profile first (FK constraint), then user
+    $user->profile()->delete();
+    $user->delete();
 
-        Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
-    }
+    return Redirect::to('/');
+}
 }
