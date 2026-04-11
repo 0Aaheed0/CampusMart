@@ -17,9 +17,9 @@ class ProfileTest extends TestCase
             'email'      => 'test@example.com',
             'department' => 'CSE',
             'student_id' => '123456',
-            'batch'      => '2021',
+            'batch'      => '48th',
             'number'     => '01700000000',
-            'gender'     => 'male',
+            'gender'     => 'Male',
         ], $overrides);
     }
 
