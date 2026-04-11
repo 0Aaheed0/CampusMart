@@ -15,7 +15,7 @@ class EmailVerificationTest extends TestCase
 
     public function test_email_verification_screen_can_be_rendered(): void
     {
-        $this->assertTrue(true); // view heavily customized, skip render test
+        $this->assertTrue(true); // custom view, skip render test
     }
 
     public function test_email_can_be_verified(): void

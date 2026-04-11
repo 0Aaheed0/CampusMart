@@ -18,7 +18,6 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_authenticate_using_the_login_screen(): void
     {
-        // JWT-based app - test that login redirects correctly with valid credentials
         $user = User::factory()->create();
 
         $response = $this->post('/login', [
@@ -26,22 +25,19 @@ class AuthenticationTest extends TestCase
             'password' => 'password',
         ]);
 
-        // JWT auth redirects on success, doesn't use session assertAuthenticated
-        $response->assertRedirect();
-        $this->assertNotEquals('/login', $response->headers->get('Location'));
+        $this->assertAuthenticated();
+        $response->assertRedirect('/home');
     }
 
     public function test_users_can_not_authenticate_with_invalid_password(): void
     {
         $user = User::factory()->create();
 
-        $response = $this->post('/login', [
+        $this->post('/login', [
             'email'    => $user->email,
             'password' => 'wrong-password',
         ]);
 
-        // Should redirect back with error, not to home
-        $response->assertRedirect();
         $this->assertGuest();
     }
 
@@ -51,6 +47,7 @@ class AuthenticationTest extends TestCase
 
         $response = $this->actingAs($user)->post('/logout');
 
+        $this->assertGuest();
         $response->assertRedirect('/');
     }
 }

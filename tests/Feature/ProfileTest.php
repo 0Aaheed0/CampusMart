@@ -47,7 +47,6 @@ class ProfileTest extends TestCase
         $user->refresh();
         $this->assertSame('Test User', $user->name);
         $this->assertSame('test@example.com', $user->email);
-        // email changed so verified_at should be null
         $this->assertNull($user->email_verified_at);
     }
 
@@ -63,25 +62,24 @@ class ProfileTest extends TestCase
             ->assertSessionHasNoErrors()
             ->assertRedirect('/profile');
 
-        // email unchanged so verified_at should still be set
         $this->assertNotNull($user->refresh()->email_verified_at);
     }
 
     public function test_user_can_delete_their_account(): void
-{
-    $user = User::factory()->create();
+    {
+        $user = User::factory()->create();
 
-    $response = $this
-        ->actingAs($user)
-        ->delete('/profile', ['password' => 'password']);
+        $response = $this
+            ->actingAs($user)
+            ->delete('/profile', ['password' => 'password']);
 
-    $response
-        ->assertSessionHasNoErrors()
-        ->assertRedirect('/');
+        $response
+            ->assertSessionHasNoErrors()
+            ->assertRedirect('/');
 
-    // User deleted from DB - that's what matters
-    $this->assertNull($user->fresh());
-}
+        $this->assertGuest();
+        $this->assertNull($user->fresh());
+    }
 
     public function test_correct_password_must_be_provided_to_delete_account(): void
     {

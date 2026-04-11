@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,7 +16,6 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register(): void
     {
-        // Your app requires @aust.edu emails
         $response = $this->post('/register', [
             'name'                  => 'Test User',
             'email'                 => 'testuser@aust.edu',
@@ -25,7 +23,7 @@ class RegistrationTest extends TestCase
             'password_confirmation' => 'password123',
         ]);
 
-        // JWT-based app redirects to /home on success
+        $this->assertAuthenticated();
         $response->assertRedirect('/home');
     }
 }
