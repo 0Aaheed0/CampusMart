@@ -9,17 +9,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('profiles', function (Blueprint $table) {
-            $table->id(); // primary key
-            $table->unsignedBigInteger('user_id')->nullable(); // optional link to users table
-            $table->string('department');
-            $table->integer('year');
-            $table->integer('semester');
-            $table->string('gender');
-            $table->string('number');
+            $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('department')->nullable();
+            $table->string('student_id')->nullable();
+            $table->string('batch')->nullable();
+            $table->string('year')->nullable();
+            $table->string('semester')->nullable();
+            $table->string('gender')->nullable();
+            $table->string('number')->nullable();
+            $table->string('profile_picture')->nullable();
             $table->timestamps();
 
-            // Foreign key if you have a users table
-            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

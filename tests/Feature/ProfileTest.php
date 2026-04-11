@@ -47,6 +47,7 @@ class ProfileTest extends TestCase
         $user->refresh();
         $this->assertSame('Test User', $user->name);
         $this->assertSame('test@example.com', $user->email);
+        // email changed so verified_at should be null
         $this->assertNull($user->email_verified_at);
     }
 
@@ -62,6 +63,7 @@ class ProfileTest extends TestCase
             ->assertSessionHasNoErrors()
             ->assertRedirect('/profile');
 
+        // email unchanged so verified_at should still be set
         $this->assertNotNull($user->refresh()->email_verified_at);
     }
 
