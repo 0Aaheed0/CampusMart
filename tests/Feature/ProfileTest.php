@@ -23,14 +23,16 @@ class ProfileTest extends TestCase
         ], $overrides);
     }
 
-    public function test_profile_page_is_displayed(): void
-    {
-        $user = User::factory()->create();
+   public function test_profile_page_is_displayed(): void
+{
+    $this->withoutExceptionHandling(); // ← add this temporarily
+    
+    $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get('/profile');
+    $response = $this->actingAs($user)->get('/profile');
 
-        $response->assertOk();
-    }
+    $response->assertOk();
+}
 
     public function test_profile_information_can_be_updated(): void
     {
