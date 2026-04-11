@@ -10,13 +10,24 @@ class ProfileTest extends TestCase
 {
     use RefreshDatabase;
 
+    private function profileData(array $overrides = []): array
+    {
+        return array_merge([
+            'name'       => 'Test User',
+            'email'      => 'test@example.com',
+            'department' => 'CSE',
+            'student_id' => '123456',
+            'batch'      => '2021',
+            'number'     => '01700000000',
+            'gender'     => 'male',
+        ], $overrides);
+    }
+
     public function test_profile_page_is_displayed(): void
     {
         $user = User::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->get('/profile');
+        $response = $this->actingAs($user)->get('/profile');
 
         $response->assertOk();
     }
@@ -27,17 +38,13 @@ class ProfileTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->patch('/profile', [
-                'name' => 'Test User',
-                'email' => 'test@example.com',
-            ]);
+            ->patch('/profile', $this->profileData());
 
         $response
             ->assertSessionHasNoErrors()
             ->assertRedirect('/profile');
 
         $user->refresh();
-
         $this->assertSame('Test User', $user->name);
         $this->assertSame('test@example.com', $user->email);
         $this->assertNull($user->email_verified_at);
@@ -49,10 +56,7 @@ class ProfileTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->patch('/profile', [
-                'name' => 'Test User',
-                'email' => $user->email,
-            ]);
+            ->patch('/profile', $this->profileData(['email' => $user->email]));
 
         $response
             ->assertSessionHasNoErrors()
@@ -67,9 +71,7 @@ class ProfileTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->delete('/profile', [
-                'password' => 'password',
-            ]);
+            ->delete('/profile', ['password' => 'password']);
 
         $response
             ->assertSessionHasNoErrors()
@@ -86,9 +88,7 @@ class ProfileTest extends TestCase
         $response = $this
             ->actingAs($user)
             ->from('/profile')
-            ->delete('/profile', [
-                'password' => 'wrong-password',
-            ]);
+            ->delete('/profile', ['password' => 'wrong-password']);
 
         $response
             ->assertSessionHasErrorsIn('userDeletion', 'password')

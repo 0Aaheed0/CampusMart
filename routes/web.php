@@ -18,17 +18,9 @@ Route::get('/', function () {
 
 // Authentication Routes (Guest only)
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
-    
-    // Google One Tap (accessible to guests)
+    // Google One Tap only - login/register handled by auth.php
     Route::post('/auth/google-one-tap', [\App\Http\Controllers\Auth\GoogleOneTapController::class, 'handleOneTap'])->name('auth.google-one-tap');
 });
-
-// Logout (Needs to be accessible to logged-in users)
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
@@ -88,8 +80,6 @@ Route::middleware(['auth', 'prevent-back', 'admin'])->prefix('admin')->name('adm
     Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
     Route::delete('/users/{id}', [\App\Http\Controllers\AdminController::class, 'deleteUser'])->name('users.delete');
     Route::delete('/products/{id}', [\App\Http\Controllers\AdminController::class, 'deleteProduct'])->name('products.delete');
-    
-    // Additional admin routes requested for the dashboard navigation
     Route::get('/users', [\App\Http\Controllers\AdminController::class, 'users'])->name('users');
     Route::get('/users/{id}/profile', [\App\Http\Controllers\AdminController::class, 'getUserProfile'])->name('users.profile');
     Route::get('/products', [\App\Http\Controllers\AdminController::class, 'products'])->name('products');
@@ -107,3 +97,6 @@ Route::middleware(['auth', 'prevent-back', 'admin'])->prefix('admin')->name('adm
     Route::get('/reviews', [\App\Http\Controllers\AdminController::class, 'reviews'])->name('reviews');
     Route::get('/history', [\App\Http\Controllers\AdminController::class, 'history'])->name('history');
 });
+
+// Include Breeze auth routes (login, register, logout, password reset, email verification)
+require __DIR__.'/auth.php';
